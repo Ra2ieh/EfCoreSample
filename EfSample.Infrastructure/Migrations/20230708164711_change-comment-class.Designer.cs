@@ -4,6 +4,7 @@ using EfSample.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EfSample.Infrastructure.Migrations
 {
     [DbContext(typeof(CourseDbContext))]
-    partial class CourseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230708164711_change-comment-class")]
+    partial class changecommentclass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,29 +80,6 @@ namespace EfSample.Infrastructure.Migrations
                     b.ToTable("Course");
                 });
 
-            modelBuilder.Entity("EfSample.Domain.Models.CourseTag", b =>
-                {
-                    b.Property<int>("CourseTagId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseTagId"));
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CourseTagId");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("CourseTag");
-                });
-
             modelBuilder.Entity("EfSample.Domain.Models.CourseTeachers", b =>
                 {
                     b.Property<int>("CourseTeachersId")
@@ -160,11 +140,16 @@ namespace EfSample.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TagId"));
 
+                    b.Property<int?>("CourseId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TagId");
+
+                    b.HasIndex("CourseId");
 
                     b.ToTable("Tag");
                 });
@@ -201,25 +186,6 @@ namespace EfSample.Infrastructure.Migrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("EfSample.Domain.Models.CourseTag", b =>
-                {
-                    b.HasOne("EfSample.Domain.Models.Course", "Course")
-                        .WithMany("Tags")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EfSample.Domain.Models.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Tag");
-                });
-
             modelBuilder.Entity("EfSample.Domain.Models.CourseTeachers", b =>
                 {
                     b.HasOne("EfSample.Domain.Models.Course", "Course")
@@ -248,6 +214,13 @@ namespace EfSample.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("EfSample.Domain.Models.Tag", b =>
+                {
+                    b.HasOne("EfSample.Domain.Models.Course", null)
+                        .WithMany("Tags")
+                        .HasForeignKey("CourseId");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Models.Course", b =>
