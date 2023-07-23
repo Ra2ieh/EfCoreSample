@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfSample.Api", "EfSample.Api\EfSample.Api.csproj", "{8F8ED3B0-0870-4A18-8F3D-A9F7445B0C57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfSample.Api", "EfSample.Api\EfSample.Api.csproj", "{8F8ED3B0-0870-4A18-8F3D-A9F7445B0C57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfSample.Domain", "EfSample.Domain\EfSample.Domain.csproj", "{7B1575D7-18B6-4F79-9576-4DABBBB696E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfSample.Domain", "EfSample.Domain\EfSample.Domain.csproj", "{7B1575D7-18B6-4F79-9576-4DABBBB696E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfSample.Application", "EfSample.Application\EfSample.Application.csproj", "{98788765-1B33-46D9-B16B-09007D1354F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfSample.Application", "EfSample.Application\EfSample.Application.csproj", "{98788765-1B33-46D9-B16B-09007D1354F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfSample.Infrastructure", "EfSample.Infrastructure\EfSample.Infrastructure.csproj", "{711ECC90-38A4-46B7-AC21-6677036BC950}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfSample.Infrastructure", "EfSample.Infrastructure\EfSample.Infrastructure.csproj", "{711ECC90-38A4-46B7-AC21-6677036BC950}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiHelper", "ApiHelper\ApiHelper.csproj", "{DD87C925-D601-428A-A73A-68B3EBBD8013}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{711ECC90-38A4-46B7-AC21-6677036BC950}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{711ECC90-38A4-46B7-AC21-6677036BC950}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{711ECC90-38A4-46B7-AC21-6677036BC950}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD87C925-D601-428A-A73A-68B3EBBD8013}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD87C925-D601-428A-A73A-68B3EBBD8013}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD87C925-D601-428A-A73A-68B3EBBD8013}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD87C925-D601-428A-A73A-68B3EBBD8013}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

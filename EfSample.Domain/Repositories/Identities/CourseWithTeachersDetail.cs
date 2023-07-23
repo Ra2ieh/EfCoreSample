@@ -1,9 +1,9 @@
 ﻿
 namespace EfSample.Domain.Repositories.Identities;
 
-public class CourseWithTeahcersDetail
+public class CourseWithTeachersDetail
 {
-    public CourseWithTeahcersDetail()
+    public CourseWithTeachersDetail()
     {
         Teachers=new List<Teacher>();
     }
