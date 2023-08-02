@@ -24,6 +24,7 @@ public class CourseRepository : ICourseRepository
                 {
                     FirstName = teacher.Teacher.FirstName,
                     LastName = teacher.Teacher.LastName,
+                    TeacherId = teacher.Teacher.TeacherId,
                 });
             }
             response.Add(new CourseWithTeachersDetail
