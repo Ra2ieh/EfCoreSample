@@ -1,9 +1,11 @@
-﻿namespace EfSample.Domain.SeedOfWork;
+﻿
+
+namespace EfSample.Domain.SeedOfWork;
 
 public interface IUnitOfWork
 {
-    Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+    public ICourseRepository CourseRepository { get; }
 
-    Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken));
+
 
 }

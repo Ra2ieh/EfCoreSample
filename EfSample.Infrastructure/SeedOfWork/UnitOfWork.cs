@@ -1,22 +1,18 @@
-﻿using EfSample.Domain.SeedOfWork;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace EfSample.Infrastructure.SeedOfWork;
 
-namespace EfSample.Infrastructure.SeedOfWork
+public class UnitOfWork : IUnitOfWork
 {
-    internal class UnitOfWork : IUnitOfWork
-    {
-        public Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
+    private readonly Lazy<ICourseRepository> _courseRepository;
+    private readonly CourseDbContext _context;
+
+    public UnitOfWork(CourseDbContext context)
+    {
+        _context = context;
+        _courseRepository = new Lazy<ICourseRepository>(() => new CourseRepository(_context));
+
     }
+
+    public ICourseRepository CourseRepository => _courseRepository.Value;
+
 }

@@ -1,8 +1,6 @@
-﻿using MediatR;
+﻿namespace EfSample.Application.Queries;
 
-namespace EfSample.Application.Queries;
-
-public class GetCourseWithTeahcersDetailQuery:IRequest<CourseWithTeahcersDetail>
+public class GetCourseWithTeahcersDetailQuery:IRequest<Result<List<CourseWithTeachersDetailsResponse>>>
 {
 }
 

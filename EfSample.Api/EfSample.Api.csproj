@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -17,6 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ApiHelper\ApiHelper.csproj" />
+    <ProjectReference Include="..\EfSample.Application\EfSample.Application.csproj" />
     <ProjectReference Include="..\EfSample.Infrastructure\EfSample.Infrastructure.csproj" />
   </ItemGroup>
 

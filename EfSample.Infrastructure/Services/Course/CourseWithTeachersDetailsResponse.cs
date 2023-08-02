@@ -1,4 +1,4 @@
-﻿namespace EfSample.Domain.Services.Course;
+﻿namespace EfSample.Infrastructure.Services.Course;
 public class CourseWithTeachersDetailsResponse
 {
     public CourseWithTeachersDetailsResponse()

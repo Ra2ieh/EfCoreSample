@@ -7,11 +7,13 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddRazorPages();
-        builder.Services.AddDbContext<CourseDbContext>(options =>
-        {
-            options.UseSqlServer(builder.Configuration.GetConnectionString("CourseDbConectionString"));
-        });
-
+        //builder.Services.AddDbContext<CourseDbContext>(options =>
+        //{
+        //    options.UseSqlServer(builder.Configuration.GetConnectionString("CourseDbConectionString"));
+        //});
+        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(GetCourseWithTeahcersDetailQueryHandler).Assembly));
+        //builder.Services.AddMediatR(typeof(GetCourseWithTeahcersDetailQueryHandler).Assembly);
+        builder.Services.InstallServicesInAssemblies(builder.Configuration);
 
         var app = builder.Build();
 
@@ -31,7 +33,10 @@ public class Program
         app.UseAuthorization();
 
         app.MapRazorPages();
-
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
         app.Run();
     }
 }
