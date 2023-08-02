@@ -3,9 +3,7 @@ public class CourseWithTeachersDetailsResponse
 {
     public CourseWithTeachersDetailsResponse()
     {
-        Teachers = new List<Teacher>();
+        Items = new List<CourseInfo>();
     }
-    public int CourseId { get; set; }
-    public string Title { get; set; } = String.Empty;
-    public List<Teacher> Teachers { get; set; }
+    public List<CourseInfo> Items { get; set; }
 }

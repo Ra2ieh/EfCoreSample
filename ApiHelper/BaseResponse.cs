@@ -9,8 +9,11 @@ public class  Result<T> where T:class
 
     public T Data { get; set; }
     public CustomError Error { get; set; }
-    public  bool HasError()
+    public bool HasError { get; set; } = false;
+    public Result<T> SetError(CustomError error)
     {
-        return Error != null;
+        Error = error;
+        HasError = true;
+        return this;
     }
 }

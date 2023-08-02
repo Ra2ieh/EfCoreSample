@@ -12,7 +12,7 @@ public class CourseController : Controller
     public async Task<IActionResult> GetCourseWithTeahcersDetail(GetCourseWithTeahcersDetailQuery getCourseWithTeahcersDetailQuery)
     {
         var serviceResult = await _mediator.Send(getCourseWithTeahcersDetailQuery);
-        if (serviceResult.HasError())
+        if (serviceResult.HasError)
             return BadRequest(serviceResult.Error);
 
         return Ok(serviceResult.Data);

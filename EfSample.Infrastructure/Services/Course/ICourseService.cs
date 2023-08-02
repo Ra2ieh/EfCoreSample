@@ -2,5 +2,5 @@
 
 public interface ICourseService
 {
-    Task<Result<List<CourseWithTeachersDetailsResponse>>> GetCourseWithTeachersDetails();
+    Task<Result<CourseWithTeachersDetailsResponse>> GetCourseWithTeachersDetails();
 }

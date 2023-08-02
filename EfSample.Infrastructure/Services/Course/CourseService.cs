@@ -5,31 +5,37 @@ public class CourseService : ICourseService
     private readonly IUnitOfWork _unitOfWork;
     public CourseService(IUnitOfWork unitOfWork)
     {
-       _unitOfWork = unitOfWork;
+        _unitOfWork = unitOfWork;
     }
-    public async Task<Result<List<CourseWithTeachersDetailsResponse>>> GetCourseWithTeachersDetails()
+    public async Task<Result<CourseWithTeachersDetailsResponse>> GetCourseWithTeachersDetails()
     {
-        var response = new Result<List<CourseWithTeachersDetailsResponse>>();
-        var data = new List<CourseWithTeachersDetailsResponse>();
-        var result=await _unitOfWork.CourseRepository.GetCourseWithTeachersDetails();
+        var response = new Result<CourseWithTeachersDetailsResponse>();
+        var data = new CourseWithTeachersDetailsResponse();
+        var result = await _unitOfWork.CourseRepository.GetCourseWithTeachersDetails();
         if (result is null)
         {
-            response.Error.Code = "12";
-            response.Error.Message = "یافت نشد";
+            response.SetError(new CustomError
+            {
+                Code = "12",
+                Message = "یافت نشد"
+            });
             return response;
         };
+        var courseInfo = new List<CourseInfo>();
         foreach (var item in result)
         {
-            var course = new  CourseWithTeachersDetailsResponse
+            var course = new CourseInfo
             {
 
                 CourseId = item.CourseId,
                 Title = item.Title,
                 Teachers = item.Teachers,
             };
-            data.Add(course);
+            courseInfo.Add(course);
         }
+
         response.Data = data;
+        response.Data.Items = courseInfo;
         return response;
     }
 }
