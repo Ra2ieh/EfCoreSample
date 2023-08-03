@@ -1,6 +1,7 @@
-﻿namespace EfSample.Api.Controllers;
+﻿
+namespace EfSample.Api.Controllers;
 [ApiController]
-[Route("api/v1/Course/Eager/[action]")]
+[Route("api/v1/Course/[action]")]
 public class CourseEagerController : Controller
 {
     private readonly IMediator _mediator;
@@ -9,8 +10,12 @@ public class CourseEagerController : Controller
         _mediator = mediator;
     }
     [HttpGet]
-    public async Task<IActionResult> GetCourseWithTeahcersDetail(GetCourseWithTeahcersDetailEagerQuery getCourseWithTeahcersDetailQuery)
+    public async Task<IActionResult> GetCourseWithTeahcersDetail([FromQuery] LoadingTypes loadingTypes)
     {
+        var getCourseWithTeahcersDetailQuery = new GetCourseWithTeahcersDetailQuery
+        {
+            LoadingType = loadingTypes,
+        };
         var serviceResult = await _mediator.Send(getCourseWithTeahcersDetailQuery);
         if (serviceResult.HasError)
             return BadRequest(serviceResult.Error);
@@ -19,9 +24,12 @@ public class CourseEagerController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetCourseWithTeahcersAndTagsDetail()
+    public async Task<IActionResult> GetCourseWithTeahcersAndTagsDetail([FromQuery]LoadingTypes loadingTypes)
     {
-        GetCourseWithTeahcersAndTagsDetailEagerQuery getCourseWithTeahcersDetailQuery =new GetCourseWithTeahcersAndTagsDetailEagerQuery();
+        var getCourseWithTeahcersDetailQuery =new GetCourseWithTeahcersAndTagsDetailQuery
+        {
+            LoadingType = loadingTypes,
+        };
         var serviceResult = await _mediator.Send(getCourseWithTeahcersDetailQuery);
         if (serviceResult.HasError)
             return BadRequest(serviceResult.Error);

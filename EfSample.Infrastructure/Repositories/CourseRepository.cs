@@ -1,6 +1,4 @@
-﻿
-
-namespace EfSample.Infrastructure.Repositories;
+﻿namespace EfSample.Infrastructure.Repositories;
 
 public class CourseRepository : ICourseRepository
 {
@@ -14,8 +12,8 @@ public class CourseRepository : ICourseRepository
     public async Task<List<CourseWithTeachersDetail>> GetCourseWithTeachersDetailsEager()
     {
         var response = new List<CourseWithTeachersDetail>();
-        var result = _dbContext.Course.Include(e => e.CourseTeachers).ThenInclude(e => e.Teacher).ToListAsync();
-        foreach (var course in result.Result)
+        var result =await _dbContext.Course.Include(e => e.CourseTeachers).ThenInclude(e => e.Teacher).ToListAsync();
+        foreach (var course in result)
         {
             var teachers = new List<Teacher>();
             foreach (var teacher in course.CourseTeachers)
@@ -41,12 +39,12 @@ public class CourseRepository : ICourseRepository
     public async Task<List<CourseWithTeachersAndTagsDetail>> GetCourseWithTeachersAndTagsDetailsEager()
     {
         var response = new List<CourseWithTeachersAndTagsDetail>();
-        var result = _dbContext.Course
-            .Include(e => e.CourseTeachers.OrderBy(e=>e.TeacherId)).ThenInclude(e => e.Teacher).Skip(1)
-            .Include(e=>e.Tags).ThenInclude(e=>e.Tag).Take(2)
-            .OrderBy(e=>e.StartDate)
+        var result =await _dbContext.Course
+            .Include(e => e.CourseTeachers.OrderBy(e => e.TeacherId)).ThenInclude(e => e.Teacher).Skip(1)
+            .Include(e => e.Tags).ThenInclude(e => e.Tag).Take(2)
+            .OrderBy(e => e.StartDate)
             .ToListAsync();
-        foreach (var course in result.Result)
+        foreach (var course in result)
         {
             var teachers = new List<Teacher>();
             var tags = new List<Tag>();
@@ -64,7 +62,7 @@ public class CourseRepository : ICourseRepository
                 tags.Add(new Tag
                 {
                     TagId = tag.Tag.TagId,
-                    Title  =tag.Tag.Title
+                    Title = tag.Tag.Title
                 });
             }
             response.Add(new CourseWithTeachersAndTagsDetail
@@ -72,12 +70,82 @@ public class CourseRepository : ICourseRepository
                 CourseId = course.CourseId,
                 Title = course.Title,
                 Teachers = teachers,
-                Tags= tags
+                Tags = tags
 
             });
         }
         return response;
     }
     #endregion
+    #region Explicit Loading
+    public async Task<List<CourseWithTeachersDetail>> GetCourseWithTeachersDetailsExplicit()
+    {
+        var response = new List<CourseWithTeachersDetail>();
+        var result =await _dbContext.Course.ToListAsync();
+        foreach (var course in result)
+        {
+             _dbContext.Entry(course).Collection(c=>c.CourseTeachers).Load();
+            var teachers = new List<Teacher>();
+            foreach (var courseTeacher in course.CourseTeachers)
+            {
+                _dbContext.Entry(courseTeacher).Reference(c => c.Teacher).Load();
+                teachers.Add(new Teacher
+                {
+                    FirstName = courseTeacher.Teacher.FirstName,
+                    LastName = courseTeacher.Teacher.LastName,
+                    TeacherId = courseTeacher.Teacher.TeacherId,
+                });
+            }
+            response.Add(new CourseWithTeachersDetail
+            {
+                CourseId = course.CourseId,
+                Title = course.Title,
+                Teachers = teachers,
 
+            });
+        }
+        return response;
+    }
+
+    public async Task<List<CourseWithTeachersAndTagsDetail>> GetCourseWithTeachersAndTagsDetailsExplicit()
+    {
+        var response = new List<CourseWithTeachersAndTagsDetail>();
+        var result = _dbContext.Course.ToList();
+        foreach (var course in result)
+        {
+            await _dbContext.Entry(course).Collection(e => e.CourseTeachers).LoadAsync();
+            await _dbContext.Entry(course).Collection(e => e.Tags).LoadAsync();
+            var teachers = new List<Teacher>();
+            var tags = new List<Tag>();
+            foreach (var courseTeacher in course.CourseTeachers)
+            {
+                await _dbContext.Entry(courseTeacher).Reference(e => e.Teacher).LoadAsync();
+                teachers.Add(new Teacher
+                {
+                    FirstName = courseTeacher.Teacher.FirstName,
+                    LastName = courseTeacher.Teacher.LastName,
+                    TeacherId = courseTeacher.Teacher.TeacherId,
+                });
+            }
+            foreach (var courseTag in course.Tags)
+            {
+                await _dbContext.Entry(courseTag).Reference(e => e.Tag).LoadAsync();
+                tags.Add(new Tag
+                {
+                    TagId = courseTag.Tag.TagId,
+                    Title = courseTag.Tag.Title
+                });
+            }
+            response.Add(new CourseWithTeachersAndTagsDetail
+            {
+                CourseId = course.CourseId,
+                Title = course.Title,
+                Teachers = teachers,
+                Tags = tags
+
+            });
+        }
+        return response;
+    }
+    #endregion
 }

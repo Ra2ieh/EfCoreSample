@@ -12,3 +12,4 @@ global using System.Reflection;
 global using ApiHelper;
 global using EfSample.Infrastructure.Services.Course;
 global using EfSample.Domain.Repositories.Identities;
+global using ApiHelper.Enums;

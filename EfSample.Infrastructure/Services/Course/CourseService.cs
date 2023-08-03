@@ -1,4 +1,6 @@
-﻿namespace EfSample.Infrastructure.Services.Course;
+﻿
+
+namespace EfSample.Infrastructure.Services.Course;
 
 public class CourseService : ICourseService
 {
@@ -7,22 +9,61 @@ public class CourseService : ICourseService
     {
         _unitOfWork = unitOfWork;
     }
-    public async Task<Result<CourseWithTeachersDetailsResponse>> GetCourseWithTeachersDetailsEager()
+    public async Task<Result<CourseWithTeachersDetailsResponse>> GetCourseWithTeachersDetails(LoadingTypes loadingTypes)
     {
         var response = new Result<CourseWithTeachersDetailsResponse>();
-        var data = new CourseWithTeachersDetailsResponse();
-        var result = await _unitOfWork.CourseRepository.GetCourseWithTeachersDetailsEager();
-        if (result is null)
+        var result =new List<CourseWithTeachersDetail>();
+                switch (loadingTypes)
         {
-            response.SetError(new CustomError
+            case LoadingTypes.EagerLoading:
+                 result = await _unitOfWork.CourseRepository.GetCourseWithTeachersDetailsEager();
+                break;
+            case LoadingTypes.ExplicitLoading:
+                 result = await _unitOfWork.CourseRepository.GetCourseWithTeachersDetailsExplicit();
+                break;
+            default:
+                 result = await _unitOfWork.CourseRepository.GetCourseWithTeachersDetailsEager();
+                break;
+        }
+        return CourseWithTeachers(result,response);
+       
+    }
+
+    public async Task<Result<CourseWithTeachersAndTagsDetailRsponse>> GetCourseWithTeachersAndTagsDetails(LoadingTypes loadingTypes)
+    {
+        var response = new Result<CourseWithTeachersAndTagsDetailRsponse>();
+        var result = new List<CourseWithTeachersAndTagsDetail>();
+        switch (loadingTypes)
+        {
+            case LoadingTypes.EagerLoading:
+                 result = await _unitOfWork.CourseRepository.GetCourseWithTeachersAndTagsDetailsEager();
+                break;
+            case LoadingTypes.ExplicitLoading:
+                 result = await _unitOfWork.CourseRepository.GetCourseWithTeachersAndTagsDetailsExplicit();
+                break;
+            default:
+                 result = await _unitOfWork.CourseRepository.GetCourseWithTeachersAndTagsDetailsEager();
+                break;
+        }
+        return CourseWithTeachersAndTags(result, response);
+    }
+
+
+
+    private Result<CourseWithTeachersDetailsResponse> CourseWithTeachers(List<CourseWithTeachersDetail> req, Result<CourseWithTeachersDetailsResponse> res)
+    {
+        var data = new CourseWithTeachersDetailsResponse();
+        if (req is null)
+        {
+            res.SetError(new CustomError
             {
                 Code = "12",
                 Message = "یافت نشد"
             });
-            return response;
+            return res;
         };
         var courseInfo = new List<CourseInfo>();
-        foreach (var item in result)
+        foreach (var item in req)
         {
             var course = new CourseInfo
             {
@@ -34,16 +75,15 @@ public class CourseService : ICourseService
             courseInfo.Add(course);
         }
 
-        response.Data = data;
-        response.Data.Items = courseInfo;
-        return response;
+        res.Data = data;
+        res.Data.Items = courseInfo;
+        return res;
     }
 
-    public async Task<Result<CourseWithTeachersAndTagsDetailRsponse>> GetCourseWithTeachersAndTagsDetailsEager()
+
+    private Result<CourseWithTeachersAndTagsDetailRsponse> CourseWithTeachersAndTags(List<CourseWithTeachersAndTagsDetail> result,Result<CourseWithTeachersAndTagsDetailRsponse> response)
     {
-        var response = new Result<CourseWithTeachersAndTagsDetailRsponse>();
         var data = new CourseWithTeachersAndTagsDetailRsponse();
-        var result = await _unitOfWork.CourseRepository.GetCourseWithTeachersAndTagsDetailsEager();
         if (result is null)
         {
             response.SetError(new CustomError
@@ -62,7 +102,7 @@ public class CourseService : ICourseService
                 CourseId = item.CourseId,
                 Title = item.Title,
                 Teachers = item.Teachers,
-                Tags=item.Tags
+                Tags = item.Tags
             };
             courseInfo.Add(course);
         }

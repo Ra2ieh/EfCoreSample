@@ -2,7 +2,7 @@
 
 namespace EfSample.Application.Queries;
 
-public class CourseWithTeachersAndTagsDetailQueryHandler : IRequestHandler<GetCourseWithTeahcersAndTagsDetailEagerQuery, Result<CourseWithTeachersAndTagsDetailRsponse>>
+public class CourseWithTeachersAndTagsDetailQueryHandler : IRequestHandler<GetCourseWithTeahcersAndTagsDetailQuery, Result<CourseWithTeachersAndTagsDetailRsponse>>
 {
     private readonly ICourseService _courseServices;
     public CourseWithTeachersAndTagsDetailQueryHandler(ICourseService courseServices)
@@ -10,8 +10,8 @@ public class CourseWithTeachersAndTagsDetailQueryHandler : IRequestHandler<GetCo
         _courseServices = courseServices;
     }
 
-    public Task<Result<CourseWithTeachersAndTagsDetailRsponse>> Handle(GetCourseWithTeahcersAndTagsDetailEagerQuery request, CancellationToken cancellationToken)
+    public Task<Result<CourseWithTeachersAndTagsDetailRsponse>> Handle(GetCourseWithTeahcersAndTagsDetailQuery request, CancellationToken cancellationToken)
     {
-        return _courseServices.GetCourseWithTeachersAndTagsDetailsEager();
+        return _courseServices.GetCourseWithTeachersAndTagsDetails(request.LoadingType);
     }
 }
