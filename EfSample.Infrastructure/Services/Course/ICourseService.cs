@@ -2,5 +2,6 @@
 
 public interface ICourseService
 {
-    Task<Result<CourseWithTeachersDetailsResponse>> GetCourseWithTeachersDetails();
+    Task<Result<CourseWithTeachersDetailsResponse>> GetCourseWithTeachersDetailsEager();
+    Task<Result<CourseWithTeachersAndTagsDetailRsponse>> GetCourseWithTeachersAndTagsDetailsEager();
 }
