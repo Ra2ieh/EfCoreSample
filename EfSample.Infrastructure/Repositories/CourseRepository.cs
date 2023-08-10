@@ -37,7 +37,7 @@ public class CourseRepository : ICourseRepository
     }
 
     public async Task<List<CourseWithTeachersAndTagsDetail>> GetCourseWithTeachersAndTagsDetailsEager()
-    {
+    {   //using take and skip for pagination
         var response = new List<CourseWithTeachersAndTagsDetail>();
         var result =await _dbContext.Course
             .Include(e => e.CourseTeachers.OrderBy(e => e.TeacherId)).ThenInclude(e => e.Teacher).Skip(1)
@@ -148,4 +148,17 @@ public class CourseRepository : ICourseRepository
         return response;
     }
     #endregion
+    #region Select Loading
+    public async Task<List<CourseShortInfo>> GetCourseSelectLoading()
+    {
+        var result = await _dbContext.Course.Select(e => new CourseShortInfo
+        {
+            Id = e.CourseId,
+            Tilte = e.Title
+        }).ToListAsync();
+        return result;
+    }
+    #endregion 
+
+
 }

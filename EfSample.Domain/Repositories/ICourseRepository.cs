@@ -1,6 +1,4 @@
-﻿
-
-namespace EfSample.Domain.Repositories;
+﻿namespace EfSample.Domain.Repositories;
 
 public interface  ICourseRepository
 {
@@ -9,6 +7,6 @@ public interface  ICourseRepository
     Task<List<CourseWithTeachersAndTagsDetail>> GetCourseWithTeachersAndTagsDetailsEager();
     Task<List<CourseWithTeachersDetail>> GetCourseWithTeachersDetailsExplicit();
     Task<List<CourseWithTeachersAndTagsDetail>> GetCourseWithTeachersAndTagsDetailsExplicit();
-
+    Task<List<CourseShortInfo>> GetCourseSelectLoading();
 
 }

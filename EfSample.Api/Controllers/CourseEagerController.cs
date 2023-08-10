@@ -36,4 +36,16 @@ public class CourseEagerController : Controller
 
         return Ok(serviceResult.Data);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetCourseInfoSelectLoading()
+    {
+        var getCourseInfoQuery = new GetCourseInfoQuery();
+
+        var serviceResult = await _mediator.Send(getCourseInfoQuery);
+        if (serviceResult.HasError)
+            return BadRequest(serviceResult.Error);
+
+        return Ok(serviceResult.Data);
+    }
 }

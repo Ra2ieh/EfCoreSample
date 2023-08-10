@@ -32,6 +32,7 @@ public class CourseService : ICourseService
     public async Task<Result<CourseWithTeachersAndTagsDetailRsponse>> GetCourseWithTeachersAndTagsDetails(LoadingTypes loadingTypes)
     {
         var response = new Result<CourseWithTeachersAndTagsDetailRsponse>();
+
         var result = new List<CourseWithTeachersAndTagsDetail>();
         switch (loadingTypes)
         {
@@ -47,7 +48,37 @@ public class CourseService : ICourseService
         }
         return CourseWithTeachersAndTags(result, response);
     }
+    public async Task<Result<GetCourseInfoResponse>> GetCourseShortInfo()
+    {
+        var response = new Result<GetCourseInfoResponse>();
+        var data = new GetCourseInfoResponse();
+        var result = new List<CourseDto>();
+        var dbResult = await _unitOfWork.CourseRepository.GetCourseSelectLoading();
+        if (dbResult != null)
+        {
+            foreach (var course in dbResult)
+            {
+                result.Add(new CourseDto
+                {
+                    CourseTitle = course.Tilte,
+                    CourseId = course.Id
+                });
+            }
+            response.Data = data;
+            response.Data.Items = result;
+            return response;
+        }
+        else
+        {
+            response.SetError(new CustomError
+            {
+                Code = "12",
+                Message = "یافت نشد"
+            });
+            return response;
+        }
 
+    }
 
 
     private Result<CourseWithTeachersDetailsResponse> CourseWithTeachers(List<CourseWithTeachersDetail> req, Result<CourseWithTeachersDetailsResponse> res)
