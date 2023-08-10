@@ -8,5 +8,6 @@ public interface  ICourseRepository
     Task<List<CourseWithTeachersDetail>> GetCourseWithTeachersDetailsExplicit();
     Task<List<CourseWithTeachersAndTagsDetail>> GetCourseWithTeachersAndTagsDetailsExplicit();
     Task<List<CourseShortInfo>> GetCourseSelectLoading();
+    Task<List<CourseShortInfo>> GetCourseWithFilter(SearchCourseFilters courseFilters);
 
 }

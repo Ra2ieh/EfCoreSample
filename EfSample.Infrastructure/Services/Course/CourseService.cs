@@ -80,6 +80,43 @@ public class CourseService : ICourseService
 
     }
 
+    public async Task<Result<SearchCourseResponse>> SearchCourse(SearchCourseRequest request)
+    {
+        var response = new Result<SearchCourseResponse>();
+        var data = new SearchCourseResponse();
+        var result = new List<CourseDto>();
+        var dbResult = await _unitOfWork.CourseRepository.GetCourseWithFilter(new SearchCourseFilters
+        {
+            PageNumber = request.PageNumber,
+            PageSize = request.PageSize,
+            SearchText = request.SearchText,
+        });
+        if (dbResult != null)
+        {
+            foreach (var course in dbResult)
+            {
+                result.Add(new CourseDto
+                {
+                    CourseTitle = course.Tilte,
+                    CourseId = course.Id
+                });
+            }
+            response.Data = data;
+            response.Data.Items = result;
+            return response;
+        }
+        else
+        {
+            response.SetError(new CustomError
+            {
+                Code = "12",
+                Message = "یافت نشد"
+            });
+            return response;
+        }
+
+    }
+
 
     private Result<CourseWithTeachersDetailsResponse> CourseWithTeachers(List<CourseWithTeachersDetail> req, Result<CourseWithTeachersDetailsResponse> res)
     {

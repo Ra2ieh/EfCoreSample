@@ -158,7 +158,18 @@ public class CourseRepository : ICourseRepository
         }).ToListAsync();
         return result;
     }
-    #endregion 
+
+    public async Task<List<CourseShortInfo>> GetCourseWithFilter(SearchCourseFilters courseFilters)
+    {
+        var result = await _dbContext.Course.Select(e => new CourseShortInfo
+        {
+            Id = e.CourseId,
+            Tilte = e.Title
+        }).Where(c=> EF.Functions.Like(c.Tilte,$"%{courseFilters.SearchText}%")).Skip((courseFilters.PageNumber-1)* courseFilters.PageSize).Take(courseFilters.PageSize).ToListAsync();
+        
+        return result;
+    }
+    #endregion
 
 
 }

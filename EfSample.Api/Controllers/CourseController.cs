@@ -2,10 +2,10 @@
 namespace EfSample.Api.Controllers;
 [ApiController]
 [Route("api/v1/Course/[action]")]
-public class CourseEagerController : Controller
+public class CourseController : Controller
 {
     private readonly IMediator _mediator;
-    public CourseEagerController(IMediator mediator)
+    public CourseController(IMediator mediator)
     {
         _mediator = mediator;
     }
@@ -24,9 +24,9 @@ public class CourseEagerController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetCourseWithTeahcersAndTagsDetail([FromQuery]LoadingTypes loadingTypes)
+    public async Task<IActionResult> GetCourseWithTeahcersAndTagsDetail([FromQuery] LoadingTypes loadingTypes)
     {
-        var getCourseWithTeahcersDetailQuery =new GetCourseWithTeahcersAndTagsDetailQuery
+        var getCourseWithTeahcersDetailQuery = new GetCourseWithTeahcersAndTagsDetailQuery
         {
             LoadingType = loadingTypes,
         };
@@ -43,6 +43,15 @@ public class CourseEagerController : Controller
         var getCourseInfoQuery = new GetCourseInfoQuery();
 
         var serviceResult = await _mediator.Send(getCourseInfoQuery);
+        if (serviceResult.HasError)
+            return BadRequest(serviceResult.Error);
+
+        return Ok(serviceResult.Data);
+    }
+    [HttpPost]
+    public async Task<IActionResult> SearchCourse(SearchCourseQuery searchCourseQuery)
+    {
+        var serviceResult = await _mediator.Send(searchCourseQuery);
         if (serviceResult.HasError)
             return BadRequest(serviceResult.Error);
 
