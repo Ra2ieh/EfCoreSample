@@ -1,3 +1,5 @@
+
+
 namespace EfSample.Api;
 public class Program
 {
@@ -35,6 +37,7 @@ public class Program
             }
             await next();
         });
+        app.UseMiddleware<ResponseDtoMiddleware>();
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 

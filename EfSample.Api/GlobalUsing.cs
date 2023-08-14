@@ -7,4 +7,4 @@ global using EfSample.Application.Queries;
 global using MediatR;
 global using Microsoft.AspNetCore.Mvc;
 global using ApiHelper.Enums;
-
+global using EfSample.Api.Middlewares;
