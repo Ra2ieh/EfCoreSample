@@ -29,6 +29,13 @@ public class Program
             app.UseHsts();
         }
         //
+        app.Map("/admin", myapp =>
+         {
+             myapp.UseMiddleware<ResponseDtoMiddleware>();
+             
+
+         }
+        );
         app.Use(async (httpContext, next) =>
         {
             if(httpContext.Request.Method == HttpMethod.Get.ToString())
@@ -37,7 +44,7 @@ public class Program
             }
             await next();
         });
-        app.UseMiddleware<ResponseDtoMiddleware>();
+       // app.UseMiddleware<ResponseDtoMiddleware>();
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 
