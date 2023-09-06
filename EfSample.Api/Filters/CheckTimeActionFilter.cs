@@ -1,16 +1,16 @@
 ﻿namespace EfSample.Api.Filters
 {
-    public class CheckTimeAttribute : Attribute, IActionFilter
+    public class CheckTimeAttribute : ActionFilterAttribute
     {
 
         public static Stopwatch stopwatch;
-        public void OnActionExecuted(ActionExecutedContext context)
+        public override void OnActionExecuted(ActionExecutedContext context)
         {
             stopwatch.Stop();
             Console.WriteLine($"******************* time :{stopwatch.ElapsedMilliseconds} ms");
         }
 
-        public void OnActionExecuting(ActionExecutingContext context)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
             stopwatch = Stopwatch.StartNew();
         }
