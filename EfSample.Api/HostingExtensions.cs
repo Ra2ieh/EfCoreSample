@@ -6,7 +6,8 @@
         {
 
             // Add services to the container.
-            builder.Services.AddRazorPages();
+            builder.Services.AddMvc();
+            builder.Services.AddApiVersioning();
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(GetCourseWithTeahcersDetailQueryHandler).Assembly));
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(CourseWithTeachersAndTagsDetailQueryHandler).Assembly));
 

@@ -1,7 +1,7 @@
-﻿
-namespace EfSample.Api.Controllers;
+﻿namespace EfSample.Api.Controllers;
 [ApiController]
-[Route("api/v1/Course/[action]")]
+[ApiVersion("1")]
+[Route("api/v{version:apiVersion}/Course/[action]")]
 public class CourseController : Controller
 {
     private readonly IMediator _mediator;
