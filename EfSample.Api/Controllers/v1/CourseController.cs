@@ -1,4 +1,5 @@
-﻿namespace EfSample.Api.Controllers;
+﻿
+namespace EfSample.Api.Controllers;
 [ApiController]
 [ApiVersion("1")]
 [Route("api/v{version:apiVersion}/Course/[action]")]
@@ -9,8 +10,9 @@ public class CourseController : Controller
     {
         _mediator = mediator;
     }
+    [CheckTime]
     [HttpGet]
-    public async Task<IActionResult> GetCourseWithTeahcersDetail([FromQuery] LoadingTypes loadingTypes)
+    public async Task<IActionResult> GetCourseWithTeahcersDetail( LoadingTypes loadingTypes)
     {
         var getCourseWithTeahcersDetailQuery = new GetCourseWithTeahcersDetailQuery
         {
@@ -22,9 +24,9 @@ public class CourseController : Controller
 
         return Ok(serviceResult.Data);
     }
-
+    [CheckTime]
     [HttpGet]
-    public async Task<IActionResult> GetCourseWithTeahcersAndTagsDetail([FromQuery] LoadingTypes loadingTypes)
+    public async Task<IActionResult> GetCourseWithTeahcersAndTagsDetail( LoadingTypes loadingTypes)
     {
         var getCourseWithTeahcersDetailQuery = new GetCourseWithTeahcersAndTagsDetailQuery
         {
@@ -57,4 +59,5 @@ public class CourseController : Controller
 
         return Ok(serviceResult.Data);
     }
+
 }

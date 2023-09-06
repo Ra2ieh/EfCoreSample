@@ -1,6 +1,4 @@
-﻿
-
-namespace EfSample.Infrastructure.Services.Course;
+﻿namespace EfSample.Infrastructure.Services.Course;
 
 public class CourseService : ICourseService
 {

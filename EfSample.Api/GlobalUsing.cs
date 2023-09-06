@@ -8,3 +8,8 @@ global using MediatR;
 global using Microsoft.AspNetCore.Mvc;
 global using ApiHelper.Enums;
 global using EfSample.Api.Middlewares;
+global using Microsoft.AspNetCore.Mvc.Filters;
+global using System.Diagnostics;
+global using EfSample.Api.Filters;
+
+
