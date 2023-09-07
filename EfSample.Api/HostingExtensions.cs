@@ -1,4 +1,6 @@
-﻿namespace EfSample.Api
+﻿using Microsoft.OpenApi.Models;
+
+namespace EfSample.Api
 {
     public static class HostingExtensions
     {
@@ -10,6 +12,10 @@
             builder.Services.AddApiVersioning();
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(GetCourseWithTeahcersDetailQueryHandler).Assembly));
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(CourseWithTeachersAndTagsDetailQueryHandler).Assembly));
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EFCoreSampleWebAPI", Version = "v1" });
+            });
 
             //builder.Services.AddMediatR(typeof(GetCourseWithTeahcersDetailQueryHandler).Assembly);
             builder.Services.InstallServicesInAssemblies(builder.Configuration);
@@ -45,15 +51,20 @@
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.MapDefaultControllerRoute();
             app.UseAuthorization();
-
+            app.UseSwagger();
             app.MapRazorPages();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-            
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "EFCoreSampleWebAPI");
+            });
+
             return app;
         }
     }
