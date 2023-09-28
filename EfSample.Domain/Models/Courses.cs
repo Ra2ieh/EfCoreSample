@@ -19,4 +19,5 @@ public  class Course
     public ICollection<CourseTag> Tags { get; set; }
     public ICollection<Comment> Comments { get; set; }
     public Discount Discount { get; set; }
+    public string PersianStartDate { get;}
 }
