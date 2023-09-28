@@ -20,4 +20,5 @@ public  class Course
     public ICollection<Comment> Comments { get; set; }
     public Discount Discount { get; set; }
     public string PersianStartDate { get;}
+    public List<Zone> Zones { get;}
 }

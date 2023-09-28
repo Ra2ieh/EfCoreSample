@@ -17,4 +17,10 @@ public class CourseDbContext:DbContext
 
     }
     #endregion
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        //modelBuilder.Entity<Course>().Ignore(e=>e.Zones);
+        modelBuilder.Ignore<Zone>();
+    }
 }
