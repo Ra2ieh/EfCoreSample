@@ -4,6 +4,7 @@ using EfSample.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EfSample.Infrastructure.Migrations
 {
     [DbContext(typeof(CourseDbContext))]
-    partial class CourseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230929095657_keyless")]
+    partial class keyless
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,8 +94,7 @@ namespace EfSample.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("NewPrice")
-                        .HasPrecision(14, 2)
-                        .HasColumnType("decimal(14,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.ToTable("CourseIncludingDiscount");
                 });

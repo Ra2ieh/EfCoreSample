@@ -9,6 +9,8 @@ public class CourseDbContext:DbContext
     public DbSet<Comment> Comment { get; set; }
     public DbSet<CourseTeachers> CourseTeachers { get; set; }
     public DbSet<User> User { get; set; }
+    public DbSet<MyCourses> MyCourses { get; set; }
+    public DbSet<CourseIncludingDiscount> CourseIncludingDiscount { get; set; }
 
     #region constructor
     public CourseDbContext(DbContextOptions<CourseDbContext> options):base(options)
