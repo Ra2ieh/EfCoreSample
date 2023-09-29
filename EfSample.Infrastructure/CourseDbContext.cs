@@ -1,6 +1,4 @@
-﻿
-
-namespace EfSample.Infrastructure;
+﻿namespace EfSample.Infrastructure;
 
 public class CourseDbContext:DbContext
 {
@@ -22,5 +20,6 @@ public class CourseDbContext:DbContext
     {
         //modelBuilder.Entity<Course>().Ignore(e=>e.Zones);
         modelBuilder.Ignore<Zone>();
+        modelBuilder.ApplyConfiguration(new DiscountEntityConfiguration());
     }
 }

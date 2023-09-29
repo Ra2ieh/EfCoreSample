@@ -1,4 +1,4 @@
-﻿namespace EfSample.Domain.Models;
+﻿namespace EfSample.Domain.Entities;
 public class Teacher
 {
     public Teacher()
@@ -6,7 +6,9 @@ public class Teacher
         LastName = "****";
     }
     public int TeacherId { get; set; }
+    [Column(TypeName ="nvarchar(50)")]
     public string FirstName { get; set; }=String.Empty;
+    [Column(TypeName = "nvarchar(50)")]
     public string LastName { get; set; }= String.Empty;
     public List<Zone> Zones { get; }
 }

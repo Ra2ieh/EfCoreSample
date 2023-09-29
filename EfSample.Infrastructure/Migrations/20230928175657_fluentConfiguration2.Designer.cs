@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EfSample.Infrastructure.Migrations
 {
     [DbContext(typeof(CourseDbContext))]
-    [Migration("20230707094543_init")]
-    partial class init
+    [Migration("20230928175657_fluentConfiguration2")]
+    partial class fluentConfiguration2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,17 +34,12 @@ namespace EfSample.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentId"));
 
                     b.Property<string>("CommentBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CommentText")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CouseId")
+                    b.Property<int?>("CourseId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsApproved")
@@ -75,12 +70,35 @@ namespace EfSample.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("CourseId");
 
                     b.ToTable("Course");
+                });
+
+            modelBuilder.Entity("EfSample.Domain.Entities.CourseTag", b =>
+                {
+                    b.Property<int>("CourseTagId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseTagId"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CourseTagId");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("CourseTag");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.CourseTeachers", b =>
@@ -121,11 +139,12 @@ namespace EfSample.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("NewPrice")
+                        .HasMaxLength(2000000)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.HasKey("DiscountId");
 
@@ -143,16 +162,10 @@ namespace EfSample.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TagId"));
 
-                    b.Property<int?>("CourseId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TagId");
-
-                    b.HasIndex("CourseId");
 
                     b.ToTable("Tag");
                 });
@@ -166,11 +179,9 @@ namespace EfSample.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TeacherId"));
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TeacherId");
@@ -182,11 +193,28 @@ namespace EfSample.Infrastructure.Migrations
                 {
                     b.HasOne("EfSample.Domain.Entities.Course", "Course")
                         .WithMany("Comments")
+                        .HasForeignKey("CourseId");
+
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("EfSample.Domain.Entities.CourseTag", b =>
+                {
+                    b.HasOne("EfSample.Domain.Entities.Course", "Course")
+                        .WithMany("Tags")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EfSample.Domain.Entities.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Course");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.CourseTeachers", b =>
@@ -219,21 +247,13 @@ namespace EfSample.Infrastructure.Migrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("EfSample.Domain.Entities.Tag", b =>
-                {
-                    b.HasOne("EfSample.Domain.Entities.Course", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("CourseId");
-                });
-
             modelBuilder.Entity("EfSample.Domain.Entities.Course", b =>
                 {
                     b.Navigation("Comments");
 
                     b.Navigation("CourseTeachers");
 
-                    b.Navigation("Discount")
-                        .IsRequired();
+                    b.Navigation("Discount");
 
                     b.Navigation("Tags");
                 });

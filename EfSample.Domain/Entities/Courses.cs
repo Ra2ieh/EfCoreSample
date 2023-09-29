@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
-
-namespace EfSample.Domain.Models;
+﻿namespace EfSample.Domain.Entities;
+[EntityTypeConfiguration(typeof(CourseEntityConfiguration))]
 public  class Course
 {
     private readonly ILazyLoader lazyLoader;

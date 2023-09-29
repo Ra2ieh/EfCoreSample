@@ -1,6 +1,6 @@
 ﻿
 
-namespace EfSample.Domain.Models;
+namespace EfSample.Domain.Entities;
 
 public class Zone
 {

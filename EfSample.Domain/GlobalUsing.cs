@@ -1,8 +1,13 @@
 ﻿global using System;
 global using System.Collections.Generic;
 global using System.Threading.Tasks;
-global using EfSample.Domain.Models;
+global using EfSample.Domain.Entities;
 global using EfSample.Domain.Repositories.Identities;
 global using EfSample.Domain.Repositories;
 global using EfSample.Domain.Repositories.Models;
-
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using EfSample.Domain.EntityConfigurations;
+global using Microsoft.EntityFrameworkCore.Infrastructure;
+global using System.ComponentModel.DataAnnotations.Schema;
+global using System.ComponentModel.DataAnnotations;

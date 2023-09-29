@@ -25,7 +25,7 @@ namespace EfSample.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EfSample.Domain.Models.Comment", b =>
+            modelBuilder.Entity("EfSample.Domain.Entities.Comment", b =>
                 {
                     b.Property<int>("CommentId")
                         .ValueGeneratedOnAdd()
@@ -55,7 +55,7 @@ namespace EfSample.Infrastructure.Migrations
                     b.ToTable("Comment");
                 });
 
-            modelBuilder.Entity("EfSample.Domain.Models.Course", b =>
+            modelBuilder.Entity("EfSample.Domain.Entities.Course", b =>
                 {
                     b.Property<int>("CourseId")
                         .ValueGeneratedOnAdd()
@@ -77,7 +77,7 @@ namespace EfSample.Infrastructure.Migrations
                     b.ToTable("Course");
                 });
 
-            modelBuilder.Entity("EfSample.Domain.Models.CourseTag", b =>
+            modelBuilder.Entity("EfSample.Domain.Entities.CourseTag", b =>
                 {
                     b.Property<int>("CourseTagId")
                         .ValueGeneratedOnAdd()
@@ -100,7 +100,7 @@ namespace EfSample.Infrastructure.Migrations
                     b.ToTable("CourseTag");
                 });
 
-            modelBuilder.Entity("EfSample.Domain.Models.CourseTeachers", b =>
+            modelBuilder.Entity("EfSample.Domain.Entities.CourseTeachers", b =>
                 {
                     b.Property<int>("CourseTeachersId")
                         .ValueGeneratedOnAdd()
@@ -126,7 +126,7 @@ namespace EfSample.Infrastructure.Migrations
                     b.ToTable("CourseTeachers");
                 });
 
-            modelBuilder.Entity("EfSample.Domain.Models.Discount", b =>
+            modelBuilder.Entity("EfSample.Domain.Entities.Discount", b =>
                 {
                     b.Property<int>("DiscountId")
                         .ValueGeneratedOnAdd()
@@ -151,7 +151,7 @@ namespace EfSample.Infrastructure.Migrations
                     b.ToTable("Discount");
                 });
 
-            modelBuilder.Entity("EfSample.Domain.Models.Tag", b =>
+            modelBuilder.Entity("EfSample.Domain.Entities.Tag", b =>
                 {
                     b.Property<int>("TagId")
                         .ValueGeneratedOnAdd()
@@ -167,7 +167,7 @@ namespace EfSample.Infrastructure.Migrations
                     b.ToTable("Tag");
                 });
 
-            modelBuilder.Entity("EfSample.Domain.Models.Teacher", b =>
+            modelBuilder.Entity("EfSample.Domain.Entities.Teacher", b =>
                 {
                     b.Property<int>("TeacherId")
                         .ValueGeneratedOnAdd()
@@ -186,24 +186,24 @@ namespace EfSample.Infrastructure.Migrations
                     b.ToTable("Teacher");
                 });
 
-            modelBuilder.Entity("EfSample.Domain.Models.Comment", b =>
+            modelBuilder.Entity("EfSample.Domain.Entities.Comment", b =>
                 {
-                    b.HasOne("EfSample.Domain.Models.Course", "Course")
+                    b.HasOne("EfSample.Domain.Entities.Course", "Course")
                         .WithMany("Comments")
                         .HasForeignKey("CourseId");
 
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("EfSample.Domain.Models.CourseTag", b =>
+            modelBuilder.Entity("EfSample.Domain.Entities.CourseTag", b =>
                 {
-                    b.HasOne("EfSample.Domain.Models.Course", "Course")
+                    b.HasOne("EfSample.Domain.Entities.Course", "Course")
                         .WithMany("Tags")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EfSample.Domain.Models.Tag", "Tag")
+                    b.HasOne("EfSample.Domain.Entities.Tag", "Tag")
                         .WithMany()
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -214,15 +214,15 @@ namespace EfSample.Infrastructure.Migrations
                     b.Navigation("Tag");
                 });
 
-            modelBuilder.Entity("EfSample.Domain.Models.CourseTeachers", b =>
+            modelBuilder.Entity("EfSample.Domain.Entities.CourseTeachers", b =>
                 {
-                    b.HasOne("EfSample.Domain.Models.Course", "Course")
+                    b.HasOne("EfSample.Domain.Entities.Course", "Course")
                         .WithMany("CourseTeachers")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EfSample.Domain.Models.Teacher", "Teacher")
+                    b.HasOne("EfSample.Domain.Entities.Teacher", "Teacher")
                         .WithMany()
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -233,18 +233,18 @@ namespace EfSample.Infrastructure.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("EfSample.Domain.Models.Discount", b =>
+            modelBuilder.Entity("EfSample.Domain.Entities.Discount", b =>
                 {
-                    b.HasOne("EfSample.Domain.Models.Course", "Course")
+                    b.HasOne("EfSample.Domain.Entities.Course", "Course")
                         .WithOne("Discount")
-                        .HasForeignKey("EfSample.Domain.Models.Discount", "CourseId")
+                        .HasForeignKey("EfSample.Domain.Entities.Discount", "CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("EfSample.Domain.Models.Course", b =>
+            modelBuilder.Entity("EfSample.Domain.Entities.Course", b =>
                 {
                     b.Navigation("Comments");
 

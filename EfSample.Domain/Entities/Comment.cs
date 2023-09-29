@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿
 
-namespace EfSample.Domain.Models;
+namespace EfSample.Domain.Entities;
 public class Comment
 {
     public int CommentId { get; set; }
