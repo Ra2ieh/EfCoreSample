@@ -12,7 +12,8 @@ public class CourseRepository : ICourseRepository
     public async Task<List<CourseWithTeachersDetail>> GetCourseWithTeachersDetailsEager()
     {
         var response = new List<CourseWithTeachersDetail>();
-        var result =await _dbContext.Course.Include(e => e.CourseTeachers).ThenInclude(e => e.Teacher).ToListAsync();
+        //query with shadow property
+        var result =await _dbContext.Course.Where(c=>EF.Property<bool>(c,"IsDeleted")==false).Include(e => e.CourseTeachers).ThenInclude(e => e.Teacher).ToListAsync();
         foreach (var course in result)
         {
             var teachers = new List<Teacher>();
