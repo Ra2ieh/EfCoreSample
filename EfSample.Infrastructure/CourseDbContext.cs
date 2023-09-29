@@ -8,6 +8,7 @@ public class CourseDbContext:DbContext
     public DbSet<Discount> Discount { get; set; }
     public DbSet<Comment> Comment { get; set; }
     public DbSet<CourseTeachers> CourseTeachers { get; set; }
+    public DbSet<User> User { get; set; }
 
     #region constructor
     public CourseDbContext(DbContextOptions<CourseDbContext> options):base(options)
@@ -21,5 +22,6 @@ public class CourseDbContext:DbContext
         //modelBuilder.Entity<Course>().Ignore(e=>e.Zones);
         modelBuilder.Ignore<Zone>();
         modelBuilder.ApplyConfiguration(new DiscountEntityConfiguration());
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserEntityConfiguration).Assembly);
     }
 }

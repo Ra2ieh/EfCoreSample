@@ -11,3 +11,7 @@ global using EfSample.Domain.EntityConfigurations;
 global using Microsoft.EntityFrameworkCore.Infrastructure;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using System.ComponentModel.DataAnnotations;
+global using ApiHelper.Enums;
+global using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+global using System.Linq.Expressions;
+global using EfSample.Domain.Convertors;
