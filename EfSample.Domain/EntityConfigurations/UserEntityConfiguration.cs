@@ -16,5 +16,6 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
         //inline
         builder.Property(e=>e.Age).HasConversion(e=>e.ToString(),e=>int.Parse(e)).HasMaxLength(2);
         builder.Property(e=>e.UserShipAge).HasConversion<IntoToStringConvertor>().HasMaxLength(2);
+        builder.Property(c => c.LastName).HasField("_lastNameField");
     }
 }
