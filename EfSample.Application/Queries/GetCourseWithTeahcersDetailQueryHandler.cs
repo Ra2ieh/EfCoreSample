@@ -11,7 +11,7 @@ public class GetCourseWithTeahcersDetailQueryHandler : IRequestHandler<GetCourse
     }
     public Task<Result<CourseWithTeachersDetailsResponse>> Handle(GetCourseWithTeahcersDetailQuery request, CancellationToken cancellationToken)
     {
-       return _courseServices.GetCourseWithTeachersDetails();
+       return _courseServices.GetCourseWithTeachersDetails(request.LoadingType);
 
     }
 }

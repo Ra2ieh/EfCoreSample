@@ -1,4 +1,4 @@
-﻿namespace EfSample.Domain.Models;
+﻿namespace EfSample.Domain.Entities;
 public class Tag
 {
     public int TagId { get; set; }
