@@ -1,5 +1,6 @@
 ﻿namespace EfSample.Domain.Entities;
 [EntityTypeConfiguration(typeof(CourseEntityConfiguration))]
+
 public  class Course
 {
     private readonly ILazyLoader lazyLoader;

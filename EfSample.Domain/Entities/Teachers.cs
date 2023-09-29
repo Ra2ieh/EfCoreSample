@@ -1,4 +1,5 @@
 ﻿namespace EfSample.Domain.Entities;
+[Index(nameof(LastName))]
 public class Teacher
 {
     public Teacher()
