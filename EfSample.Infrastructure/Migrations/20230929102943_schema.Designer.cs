@@ -12,14 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EfSample.Infrastructure.Migrations
 {
     [DbContext(typeof(CourseDbContext))]
-    [Migration("20230929095657_keyless")]
-    partial class keyless
+    [Migration("20230929102943_schema")]
+    partial class schema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("dbt")
                 .HasAnnotation("ProductVersion", "7.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -52,7 +53,7 @@ namespace EfSample.Infrastructure.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Comment");
+                    b.ToTable("Comment", "dbt");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.Course", b =>
@@ -77,7 +78,9 @@ namespace EfSample.Infrastructure.Migrations
 
                     b.HasKey("CourseId");
 
-                    b.ToTable("Course");
+                    b.HasIndex("Title");
+
+                    b.ToTable("Course", "dbt");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.CourseIncludingDiscount", b =>
@@ -94,9 +97,10 @@ namespace EfSample.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("NewPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(14, 2)
+                        .HasColumnType("decimal(14,2)");
 
-                    b.ToTable("CourseIncludingDiscount");
+                    b.ToTable("CourseIncludingDiscount", "view");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.CourseTag", b =>
@@ -119,7 +123,7 @@ namespace EfSample.Infrastructure.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("CourseTag");
+                    b.ToTable("CourseTag", "dbt");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.CourseTeachers", b =>
@@ -145,7 +149,7 @@ namespace EfSample.Infrastructure.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("CourseTeachers");
+                    b.ToTable("CourseTeachers", "dbt");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.Discount", b =>
@@ -173,7 +177,7 @@ namespace EfSample.Infrastructure.Migrations
                     b.HasIndex("CourseId")
                         .IsUnique();
 
-                    b.ToTable("Discount");
+                    b.ToTable("Discount", "dbt");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.MyCourses", b =>
@@ -193,7 +197,7 @@ namespace EfSample.Infrastructure.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.ToTable("MyCourses");
+                    b.ToTable("MyCourses", "view");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.Tag", b =>
@@ -209,7 +213,7 @@ namespace EfSample.Infrastructure.Migrations
 
                     b.HasKey("TagId");
 
-                    b.ToTable("Tag");
+                    b.ToTable("Tag", "dbt");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.Teacher", b =>
@@ -228,7 +232,9 @@ namespace EfSample.Infrastructure.Migrations
 
                     b.HasKey("TeacherId");
 
-                    b.ToTable("Teacher");
+                    b.HasIndex("LastName");
+
+                    b.ToTable("Teacher", "dbt");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.User", b =>
@@ -266,7 +272,7 @@ namespace EfSample.Infrastructure.Migrations
 
                     b.HasKey("UserId", "UserName");
 
-                    b.ToTable("User");
+                    b.ToTable("User", "dbt");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.Comment", b =>

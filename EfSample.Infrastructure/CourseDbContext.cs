@@ -21,9 +21,15 @@ public class CourseDbContext:DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        if(Database.IsSqlServer() || Database.IsRelational())
+        {
+            //do something
+        }
+        modelBuilder.HasDefaultSchema("dbt");
         //modelBuilder.Entity<Course>().Ignore(e=>e.Zones);
         modelBuilder.Ignore<Zone>();
         modelBuilder.ApplyConfiguration(new DiscountEntityConfiguration());
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserEntityConfiguration).Assembly);
+        modelBuilder.Entity<CourseIncludingDiscount>().ToTable(nameof(CourseIncludingDiscount),"view");
     }
 }

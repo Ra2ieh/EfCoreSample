@@ -1,5 +1,6 @@
 ﻿namespace EfSample.Domain.Entities;
 [Keyless]
+[Table(name:"MyCourses",Schema ="view")]
 public class MyCourses
 {
     public int UserId { get; set; }

@@ -6,13 +6,20 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EfSample.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initagain : Migration
+    public partial class schema : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "dbt");
+
+            migrationBuilder.EnsureSchema(
+                name: "view");
+
             migrationBuilder.CreateTable(
                 name: "Course",
+                schema: "dbt",
                 columns: table => new
                 {
                     CourseId = table.Column<int>(type: "int", nullable: false)
@@ -27,7 +34,36 @@ namespace EfSample.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CourseIncludingDiscount",
+                schema: "view",
+                columns: table => new
+                {
+                    CourseId = table.Column<int>(type: "int", nullable: false),
+                    CourseTitle = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
+                    NewPrice = table.Column<decimal>(type: "decimal(14,2)", precision: 14, scale: 2, nullable: false),
+                    DiscountId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MyCourses",
+                schema: "view",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
+                    CourseTitle = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tag",
+                schema: "dbt",
                 columns: table => new
                 {
                     TagId = table.Column<int>(type: "int", nullable: false)
@@ -41,6 +77,7 @@ namespace EfSample.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Teacher",
+                schema: "dbt",
                 columns: table => new
                 {
                     TeacherId = table.Column<int>(type: "int", nullable: false)
@@ -55,6 +92,7 @@ namespace EfSample.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "User",
+                schema: "dbt",
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "int", nullable: false),
@@ -72,6 +110,7 @@ namespace EfSample.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Comment",
+                schema: "dbt",
                 columns: table => new
                 {
                     CommentId = table.Column<int>(type: "int", nullable: false)
@@ -88,12 +127,14 @@ namespace EfSample.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_Comment_Course_CourseId",
                         column: x => x.CourseId,
+                        principalSchema: "dbt",
                         principalTable: "Course",
                         principalColumn: "CourseId");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Discount",
+                schema: "dbt",
                 columns: table => new
                 {
                     DiscountId = table.Column<int>(type: "int", nullable: false)
@@ -108,6 +149,7 @@ namespace EfSample.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_Discount_Course_CourseId",
                         column: x => x.CourseId,
+                        principalSchema: "dbt",
                         principalTable: "Course",
                         principalColumn: "CourseId",
                         onDelete: ReferentialAction.Cascade);
@@ -115,6 +157,7 @@ namespace EfSample.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "CourseTag",
+                schema: "dbt",
                 columns: table => new
                 {
                     CourseTagId = table.Column<int>(type: "int", nullable: false)
@@ -128,12 +171,14 @@ namespace EfSample.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_CourseTag_Course_CourseId",
                         column: x => x.CourseId,
+                        principalSchema: "dbt",
                         principalTable: "Course",
                         principalColumn: "CourseId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CourseTag_Tag_TagId",
                         column: x => x.TagId,
+                        principalSchema: "dbt",
                         principalTable: "Tag",
                         principalColumn: "TagId",
                         onDelete: ReferentialAction.Cascade);
@@ -141,6 +186,7 @@ namespace EfSample.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "CourseTeachers",
+                schema: "dbt",
                 columns: table => new
                 {
                     CourseTeachersId = table.Column<int>(type: "int", nullable: false)
@@ -155,12 +201,14 @@ namespace EfSample.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_CourseTeachers_Course_CourseId",
                         column: x => x.CourseId,
+                        principalSchema: "dbt",
                         principalTable: "Course",
                         principalColumn: "CourseId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CourseTeachers_Teacher_TeacherId",
                         column: x => x.TeacherId,
+                        principalSchema: "dbt",
                         principalTable: "Teacher",
                         principalColumn: "TeacherId",
                         onDelete: ReferentialAction.Cascade);
@@ -168,62 +216,96 @@ namespace EfSample.Infrastructure.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comment_CourseId",
+                schema: "dbt",
                 table: "Comment",
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Course_Title",
+                schema: "dbt",
+                table: "Course",
+                column: "Title");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CourseTag_CourseId",
+                schema: "dbt",
                 table: "CourseTag",
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CourseTag_TagId",
+                schema: "dbt",
                 table: "CourseTag",
                 column: "TagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CourseTeachers_CourseId",
+                schema: "dbt",
                 table: "CourseTeachers",
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CourseTeachers_TeacherId",
+                schema: "dbt",
                 table: "CourseTeachers",
                 column: "TeacherId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Discount_CourseId",
+                schema: "dbt",
                 table: "Discount",
                 column: "CourseId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Teacher_LastName",
+                schema: "dbt",
+                table: "Teacher",
+                column: "LastName");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Comment");
+                name: "Comment",
+                schema: "dbt");
 
             migrationBuilder.DropTable(
-                name: "CourseTag");
+                name: "CourseIncludingDiscount",
+                schema: "view");
 
             migrationBuilder.DropTable(
-                name: "CourseTeachers");
+                name: "CourseTag",
+                schema: "dbt");
 
             migrationBuilder.DropTable(
-                name: "Discount");
+                name: "CourseTeachers",
+                schema: "dbt");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Discount",
+                schema: "dbt");
 
             migrationBuilder.DropTable(
-                name: "Tag");
+                name: "MyCourses",
+                schema: "view");
 
             migrationBuilder.DropTable(
-                name: "Teacher");
+                name: "User",
+                schema: "dbt");
 
             migrationBuilder.DropTable(
-                name: "Course");
+                name: "Tag",
+                schema: "dbt");
+
+            migrationBuilder.DropTable(
+                name: "Teacher",
+                schema: "dbt");
+
+            migrationBuilder.DropTable(
+                name: "Course",
+                schema: "dbt");
         }
     }
 }
