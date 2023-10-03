@@ -42,7 +42,8 @@ public class CourseDbContext:DbContext
                                      .WithOne()
                                      .HasForeignKey(o => o.CourseId)
                                      .IsRequired()
-                                     .HasPrincipalKey(e=>e.CourseSerie);
+                                     .HasPrincipalKey(e=>e.CourseSerie)
+                                     .HasConstraintName("CourseINrelWithComment");
         modelBuilder.Entity<Course>(c =>
         {
             c.HasMany(o=>o.Tags)
