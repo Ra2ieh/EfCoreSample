@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EfSample.Infrastructure.Migrations
 {
     [DbContext(typeof(CourseDbContext))]
-    [Migration("20231003102431_on-delete")]
-    partial class ondelete
+    [Migration("20231003114222_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,12 +35,12 @@ namespace EfSample.Infrastructure.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<int?>("UserTeacherId")
+                    b.Property<int?>("TeacherId")
                         .HasColumnType("int");
 
                     b.HasKey("AccountId");
 
-                    b.HasIndex("UserTeacherId");
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Account", "dbt");
                 });
@@ -306,11 +306,11 @@ namespace EfSample.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
-                    b.HasOne("EfSample.Domain.Entities.Teacher", "User")
+                    b.HasOne("EfSample.Domain.Entities.Teacher", "Teacher")
                         .WithMany()
-                        .HasForeignKey("UserTeacherId");
+                        .HasForeignKey("TeacherId");
 
-                    b.Navigation("User");
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.Comment", b =>
@@ -320,7 +320,8 @@ namespace EfSample.Infrastructure.Migrations
                         .HasForeignKey("CourseId")
                         .HasPrincipalKey("CourseSerie")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("CourseINrelWithComment");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.CourseTag", b =>
@@ -370,6 +371,92 @@ namespace EfSample.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("EfSample.Domain.Entities.Teacher", b =>
+                {
+                    b.OwnsMany("EfSample.Domain.Entities.Address", "Address", b1 =>
+                        {
+                            b1.Property<int>("TeacherId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<string>("City")
+                                .HasMaxLength(250)
+                                .HasColumnType("nvarchar(250)");
+
+                            b1.Property<int>("PostalCode")
+                                .HasColumnType("int");
+
+                            b1.HasKey("TeacherId", "Id");
+
+                            b1.ToTable("Address", "dbt");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TeacherId");
+                        });
+
+                    b.OwnsMany("EfSample.Domain.Entities.Phone", "Phones", b1 =>
+                        {
+                            b1.Property<int>("TeacherId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<string>("Name")
+                                .HasMaxLength(250)
+                                .HasColumnType("nvarchar(250)");
+
+                            b1.Property<string>("Number")
+                                .HasMaxLength(250)
+                                .HasColumnType("nvarchar(250)");
+
+                            b1.HasKey("TeacherId", "Id");
+
+                            b1.ToTable("Phone", "dbt");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TeacherId");
+                        });
+
+                    b.OwnsOne("EfSample.Domain.Entities.Profile", "Profile", b1 =>
+                        {
+                            b1.Property<int>("TeacherId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("BirthDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("ProfileId")
+                                .HasMaxLength(250)
+                                .HasColumnType("nvarchar(250)");
+
+                            b1.Property<string>("ProfileName")
+                                .HasMaxLength(250)
+                                .HasColumnType("nvarchar(250)");
+
+                            b1.HasKey("TeacherId");
+
+                            b1.ToTable("Teacher", "dbt");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TeacherId");
+                        });
+
+                    b.Navigation("Address");
+
+                    b.Navigation("Phones");
+
+                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.Course", b =>

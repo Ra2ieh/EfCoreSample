@@ -24,6 +24,7 @@ namespace EfSample.Infrastructure.Migrations
                 {
                     CourseId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CourseSerie = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -33,6 +34,7 @@ namespace EfSample.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Course", x => x.CourseId);
+                    table.UniqueConstraint("AK_Course_CourseSerie", x => x.CourseSerie);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,7 +87,10 @@ namespace EfSample.Infrastructure.Migrations
                     TeacherId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
+                    LastName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Profile_ProfileName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Profile_ProfileId = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Profile_BirthDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -127,11 +132,11 @@ namespace EfSample.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Comment", x => x.CommentId);
                     table.ForeignKey(
-                        name: "FK_Comment_Course_CourseId",
+                        name: "CourseINrelWithComment",
                         column: x => x.CourseId,
                         principalSchema: "dbt",
                         principalTable: "Course",
-                        principalColumn: "CourseId",
+                        principalColumn: "CourseSerie",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -192,7 +197,7 @@ namespace EfSample.Infrastructure.Migrations
                 {
                     AccountId = table.Column<int>(type: "int", nullable: false),
                     AccountType = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
-                    UserTeacherId = table.Column<int>(type: "int", nullable: true)
+                    TeacherId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -202,14 +207,36 @@ namespace EfSample.Infrastructure.Migrations
                         column: x => x.AccountId,
                         principalSchema: "dbt",
                         principalTable: "Teacher",
-                        principalColumn: "TeacherId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "TeacherId");
                     table.ForeignKey(
-                        name: "FK_Account_Teacher_UserTeacherId",
-                        column: x => x.UserTeacherId,
+                        name: "FK_Account_Teacher_TeacherId",
+                        column: x => x.TeacherId,
                         principalSchema: "dbt",
                         principalTable: "Teacher",
                         principalColumn: "TeacherId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Address",
+                schema: "dbt",
+                columns: table => new
+                {
+                    TeacherId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PostalCode = table.Column<int>(type: "int", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Address", x => new { x.TeacherId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_Address_Teacher_TeacherId",
+                        column: x => x.TeacherId,
+                        principalSchema: "dbt",
+                        principalTable: "Teacher",
+                        principalColumn: "TeacherId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -242,11 +269,34 @@ namespace EfSample.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Phone",
+                schema: "dbt",
+                columns: table => new
+                {
+                    TeacherId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Number = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Phone", x => new { x.TeacherId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_Phone_Teacher_TeacherId",
+                        column: x => x.TeacherId,
+                        principalSchema: "dbt",
+                        principalTable: "Teacher",
+                        principalColumn: "TeacherId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Account_UserTeacherId",
+                name: "IX_Account_TeacherId",
                 schema: "dbt",
                 table: "Account",
-                column: "UserTeacherId");
+                column: "TeacherId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comment_CourseId",
@@ -294,6 +344,10 @@ namespace EfSample.Infrastructure.Migrations
                 schema: "dbt");
 
             migrationBuilder.DropTable(
+                name: "Address",
+                schema: "dbt");
+
+            migrationBuilder.DropTable(
                 name: "Comment",
                 schema: "dbt");
 
@@ -318,6 +372,10 @@ namespace EfSample.Infrastructure.Migrations
                 schema: "view");
 
             migrationBuilder.DropTable(
+                name: "Phone",
+                schema: "dbt");
+
+            migrationBuilder.DropTable(
                 name: "User",
                 schema: "dbt");
 
@@ -326,11 +384,11 @@ namespace EfSample.Infrastructure.Migrations
                 schema: "dbt");
 
             migrationBuilder.DropTable(
-                name: "Teacher",
+                name: "Course",
                 schema: "dbt");
 
             migrationBuilder.DropTable(
-                name: "Course",
+                name: "Teacher",
                 schema: "dbt");
         }
     }

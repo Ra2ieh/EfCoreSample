@@ -6,5 +6,5 @@ public class Account
 {
     public int AccountId { get; set; }
     public string AccountType { get; set; }
-    public Teacher User { get; set; }
+    public Teacher Teacher { get; set; }
 }

@@ -55,6 +55,13 @@ public class CourseDbContext:DbContext
                 t=>t.HasOne(d=>d.Course)
                 .WithMany()
                 .HasForeignKey(d=>d.TagId));
+          
+        });
+        modelBuilder.Entity<Teacher>(e =>
+        {
+            e.OwnsMany(o => o.Address).ToTable(nameof(Address));
+            e.OwnsMany(o => o.Phones).ToTable(nameof(Phone));
+            e.OwnsOne(o => o.Profile);
         });
     }
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

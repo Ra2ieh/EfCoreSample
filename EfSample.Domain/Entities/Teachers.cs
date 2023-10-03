@@ -13,4 +13,7 @@ public class Teacher
     public string LastName { get; set; }= String.Empty;
     public List<Zone> Zones { get; }
     public Account Account { get; set; }
+    public List<Address> Address { get; set; }
+    public List<Phone> Phones { get; set; }
+    public Profile Profile { get; set; }
 }
