@@ -63,6 +63,7 @@ public class CourseDbContext:DbContext
             e.OwnsMany(o => o.Phones).ToTable(nameof(Phone));
             e.OwnsOne(o => o.Profile);
         });
+        modelBuilder.Entity<Product>().HasDiscriminator<int>("Discriminator").HasValue<Product>(1).HasValue<Books>(2).HasValue<Podcast>(3);
     }
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
