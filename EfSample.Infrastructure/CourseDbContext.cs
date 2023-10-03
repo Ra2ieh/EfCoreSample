@@ -34,6 +34,8 @@ public class CourseDbContext:DbContext
         modelBuilder.Entity<CourseIncludingDiscount>().ToTable(nameof(CourseIncludingDiscount),"view");
         //one to one relationship configuration with fluent
         modelBuilder.Entity<Teacher>().HasOne(o=>o.Account).WithOne().HasForeignKey<Account>(o=>o.AccountId);
+        // one to many relationship configuration with fluent
+        modelBuilder.Entity<Course>().HasMany(o => o.Comments).WithOne().HasForeignKey(o => o.CourseId);
     }
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

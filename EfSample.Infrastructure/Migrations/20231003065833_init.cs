@@ -118,7 +118,7 @@ namespace EfSample.Infrastructure.Migrations
                     CommentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CommentText = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
-                    CourseId = table.Column<int>(type: "int", nullable: true),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
                     CommentBy = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     StarCount = table.Column<int>(type: "int", nullable: false),
                     IsApproved = table.Column<bool>(type: "bit", nullable: false)
@@ -131,7 +131,8 @@ namespace EfSample.Infrastructure.Migrations
                         column: x => x.CourseId,
                         principalSchema: "dbt",
                         principalTable: "Course",
-                        principalColumn: "CourseId");
+                        principalColumn: "CourseId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

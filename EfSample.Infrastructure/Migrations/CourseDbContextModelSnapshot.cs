@@ -58,7 +58,7 @@ namespace EfSample.Infrastructure.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<int?>("CourseId")
+                    b.Property<int>("CourseId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsApproved")
@@ -319,11 +319,11 @@ namespace EfSample.Infrastructure.Migrations
 
             modelBuilder.Entity("EfSample.Domain.Entities.Comment", b =>
                 {
-                    b.HasOne("EfSample.Domain.Entities.Course", "Course")
+                    b.HasOne("EfSample.Domain.Entities.Course", null)
                         .WithMany("Comments")
-                        .HasForeignKey("CourseId");
-
-                    b.Navigation("Course");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.CourseTag", b =>
