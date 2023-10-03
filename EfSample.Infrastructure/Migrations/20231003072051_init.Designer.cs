@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EfSample.Infrastructure.Migrations
 {
     [DbContext(typeof(CourseDbContext))]
-    [Migration("20231003065833_init")]
+    [Migration("20231003072051_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -132,23 +132,13 @@ namespace EfSample.Infrastructure.Migrations
 
             modelBuilder.Entity("EfSample.Domain.Entities.CourseTag", b =>
                 {
-                    b.Property<int>("CourseTagId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("TagId")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseTagId"));
 
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CourseTagId");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("TagId");
+                    b.HasKey("TagId");
 
                     b.ToTable("CourseTag", "dbt");
                 });
@@ -332,8 +322,8 @@ namespace EfSample.Infrastructure.Migrations
             modelBuilder.Entity("EfSample.Domain.Entities.CourseTag", b =>
                 {
                     b.HasOne("EfSample.Domain.Entities.Course", "Course")
-                        .WithMany("Tags")
-                        .HasForeignKey("CourseId")
+                        .WithMany()
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -385,8 +375,6 @@ namespace EfSample.Infrastructure.Migrations
                     b.Navigation("CourseTeachers");
 
                     b.Navigation("Discount");
-
-                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.Teacher", b =>

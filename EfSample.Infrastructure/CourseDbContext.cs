@@ -36,6 +36,12 @@ public class CourseDbContext:DbContext
         modelBuilder.Entity<Teacher>().HasOne(o=>o.Account).WithOne().HasForeignKey<Account>(o=>o.AccountId);
         // one to many relationship configuration with fluent
         modelBuilder.Entity<Course>().HasMany(o => o.Comments).WithOne().HasForeignKey(o => o.CourseId);
+        modelBuilder.Entity<Course>(c =>
+        {
+            c.HasMany(o=>o.Tags).WithMany(t=>t.Courses).UsingEntity<CourseTag>(
+                c=>c.HasOne(d=>d.Tag).WithMany().HasForeignKey(d=>d.TagId),
+                t=>t.HasOne(d=>d.Course).WithMany().HasForeignKey(d=>d.TagId));
+        });
     }
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

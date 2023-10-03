@@ -42,7 +42,7 @@ public class CourseRepository : ICourseRepository
         var response = new List<CourseWithTeachersAndTagsDetail>();
         var result =await _dbContext.Course
             .Include(e => e.CourseTeachers.OrderBy(e => e.TeacherId)).ThenInclude(e => e.Teacher).Skip(1)
-            .Include(e => e.Tags).ThenInclude(e => e.Tag).Take(2)
+            .Include(e => e.Tags).ThenInclude(e => e.TagId).Take(2)
             .OrderBy(e => e.StartDate)
             .ToListAsync();
         foreach (var course in result)
@@ -62,8 +62,8 @@ public class CourseRepository : ICourseRepository
             {
                 tags.Add(new Tag
                 {
-                    TagId = tag.Tag.TagId,
-                    Title = tag.Tag.Title
+                    TagId = tag.TagId,
+                    Title = tag.Title
                 });
             }
             response.Add(new CourseWithTeachersAndTagsDetail
@@ -130,11 +130,10 @@ public class CourseRepository : ICourseRepository
             }
             foreach (var courseTag in course.Tags)
             {
-                await _dbContext.Entry(courseTag).Reference(e => e.Tag).LoadAsync();
                 tags.Add(new Tag
                 {
-                    TagId = courseTag.Tag.TagId,
-                    Title = courseTag.Tag.Title
+                    TagId = courseTag.TagId,
+                    Title = courseTag.Title
                 });
             }
             response.Add(new CourseWithTeachersAndTagsDetail

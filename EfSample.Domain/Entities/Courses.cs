@@ -16,7 +16,7 @@ public  class Course
     public DateTime StartDate { get; set; }
     private ICollection<CourseTeachers> _courseTeachers;
     public ICollection<CourseTeachers> CourseTeachers { get =>lazyLoader.Load(this,ref _courseTeachers); set=>_courseTeachers=value; }
-    public ICollection<CourseTag> Tags { get; set; }
+    public ICollection<Tag> Tags { get; set; }
     public ICollection<Comment> Comments { get; set; }
     public Discount Discount { get; set; }
     public string PersianStartDate { get;}

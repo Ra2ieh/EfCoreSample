@@ -163,17 +163,15 @@ namespace EfSample.Infrastructure.Migrations
                 schema: "dbt",
                 columns: table => new
                 {
-                    CourseTagId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     TagId = table.Column<int>(type: "int", nullable: false),
                     CourseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseTag", x => x.CourseTagId);
+                    table.PrimaryKey("PK_CourseTag", x => x.TagId);
                     table.ForeignKey(
-                        name: "FK_CourseTag_Course_CourseId",
-                        column: x => x.CourseId,
+                        name: "FK_CourseTag_Course_TagId",
+                        column: x => x.TagId,
                         principalSchema: "dbt",
                         principalTable: "Course",
                         principalColumn: "CourseId",
@@ -261,18 +259,6 @@ namespace EfSample.Infrastructure.Migrations
                 schema: "dbt",
                 table: "Course",
                 column: "Title");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CourseTag_CourseId",
-                schema: "dbt",
-                table: "CourseTag",
-                column: "CourseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CourseTag_TagId",
-                schema: "dbt",
-                table: "CourseTag",
-                column: "TagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CourseTeachers_CourseId",
