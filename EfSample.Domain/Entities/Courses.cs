@@ -11,6 +11,7 @@ public  class Course
         this.lazyLoader = lazyLoader;
     }
     public int CourseId { get; set; }
+    public int CourseSerie { get; set; }
     public string Title { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public DateTime StartDate { get; set; }

@@ -33,14 +33,27 @@ public class CourseDbContext:DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserEntityConfiguration).Assembly);
         modelBuilder.Entity<CourseIncludingDiscount>().ToTable(nameof(CourseIncludingDiscount),"view");
         //one to one relationship configuration with fluent
-        modelBuilder.Entity<Teacher>().HasOne(o=>o.Account).WithOne().HasForeignKey<Account>(o=>o.AccountId);
+        modelBuilder.Entity<Teacher>().HasOne(o=>o.Account)
+                    .WithOne()
+                    .HasForeignKey<Account>(o=>o.AccountId)
+                    .OnDelete(DeleteBehavior.ClientCascade);
         // one to many relationship configuration with fluent
-        modelBuilder.Entity<Course>().HasMany(o => o.Comments).WithOne().HasForeignKey(o => o.CourseId);
+        modelBuilder.Entity<Course>().HasMany(o => o.Comments)
+                                     .WithOne()
+                                     .HasForeignKey(o => o.CourseId)
+                                     .IsRequired()
+                                     .HasPrincipalKey(e=>e.CourseSerie);
         modelBuilder.Entity<Course>(c =>
         {
-            c.HasMany(o=>o.Tags).WithMany(t=>t.Courses).UsingEntity<CourseTag>(
-                c=>c.HasOne(d=>d.Tag).WithMany().HasForeignKey(d=>d.TagId),
-                t=>t.HasOne(d=>d.Course).WithMany().HasForeignKey(d=>d.TagId));
+            c.HasMany(o=>o.Tags)
+             .WithMany(t=>t.Courses)
+             .UsingEntity<CourseTag>(
+                c=>c.HasOne(d=>d.Tag)
+                .WithMany()
+                .HasForeignKey(d=>d.TagId),
+                t=>t.HasOne(d=>d.Course)
+                .WithMany()
+                .HasForeignKey(d=>d.TagId));
         });
     }
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
