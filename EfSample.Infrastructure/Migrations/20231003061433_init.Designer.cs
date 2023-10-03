@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EfSample.Infrastructure.Migrations
 {
     [DbContext(typeof(CourseDbContext))]
-    [Migration("20230929105700_shadow-property")]
-    partial class shadowproperty
+    [Migration("20231003061433_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,6 +26,25 @@ namespace EfSample.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("EfSample.Domain.Entities.Account", b =>
+                {
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AccountType")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int?>("UserTeacherId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AccountId");
+
+                    b.HasIndex("UserTeacherId");
+
+                    b.ToTable("Account", "dbt");
+                });
+
             modelBuilder.Entity("EfSample.Domain.Entities.Comment", b =>
                 {
                     b.Property<int>("CommentId")
@@ -35,10 +54,12 @@ namespace EfSample.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentId"));
 
                     b.Property<string>("CommentBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("CommentText")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<int?>("CourseId")
                         .HasColumnType("int");
@@ -192,16 +213,16 @@ namespace EfSample.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CourseTitle")
-                        .HasMaxLength(100)
+                        .HasMaxLength(250)
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.ToTable("MyCourses", "view");
                 });
@@ -215,7 +236,8 @@ namespace EfSample.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TagId"));
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("TagId");
 
@@ -231,9 +253,11 @@ namespace EfSample.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TeacherId"));
 
                     b.Property<string>("FirstName")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("TeacherId");
@@ -279,6 +303,21 @@ namespace EfSample.Infrastructure.Migrations
                     b.HasKey("UserId", "UserName");
 
                     b.ToTable("User", "dbt");
+                });
+
+            modelBuilder.Entity("EfSample.Domain.Entities.Account", b =>
+                {
+                    b.HasOne("EfSample.Domain.Entities.Teacher", null)
+                        .WithOne("Account")
+                        .HasForeignKey("EfSample.Domain.Entities.Account", "AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EfSample.Domain.Entities.Teacher", "User")
+                        .WithMany()
+                        .HasForeignKey("UserTeacherId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EfSample.Domain.Entities.Comment", b =>
@@ -348,6 +387,11 @@ namespace EfSample.Infrastructure.Migrations
                     b.Navigation("Discount");
 
                     b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("EfSample.Domain.Entities.Teacher", b =>
+                {
+                    b.Navigation("Account");
                 });
 #pragma warning restore 612, 618
         }

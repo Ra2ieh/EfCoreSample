@@ -10,6 +10,7 @@ public class CourseDbContext:DbContext
     public DbSet<CourseTeachers> CourseTeachers { get; set; }
     public DbSet<User> User { get; set; }
     public DbSet<MyCourses> MyCourses { get; set; }
+    public DbSet<Account> Account{ get; set; }
     public DbSet<CourseIncludingDiscount> CourseIncludingDiscount { get; set; }
 
     #region constructor
@@ -31,6 +32,8 @@ public class CourseDbContext:DbContext
         modelBuilder.ApplyConfiguration(new DiscountEntityConfiguration());
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserEntityConfiguration).Assembly);
         modelBuilder.Entity<CourseIncludingDiscount>().ToTable(nameof(CourseIncludingDiscount),"view");
+        //one to one relationship configuration with fluent
+        modelBuilder.Entity<Teacher>().HasOne(o=>o.Account).WithOne().HasForeignKey<Account>(o=>o.AccountId);
     }
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

@@ -12,4 +12,5 @@ public class Teacher
     [Column(TypeName = "nvarchar(50)")]
     public string LastName { get; set; }= String.Empty;
     public List<Zone> Zones { get; }
+    public Account Account { get; set; }
 }

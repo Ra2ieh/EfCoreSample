@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EfSample.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class schema : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,7 +26,9 @@ namespace EfSample.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    ModifiedBy = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -53,9 +55,9 @@ namespace EfSample.Infrastructure.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     CourseId = table.Column<int>(type: "int", nullable: false),
-                    CourseTitle = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                    CourseTitle = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,7 +70,7 @@ namespace EfSample.Infrastructure.Migrations
                 {
                     TagId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Title = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -82,8 +84,8 @@ namespace EfSample.Infrastructure.Migrations
                 {
                     TeacherId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(50)", nullable: true)
+                    FirstName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -115,9 +117,9 @@ namespace EfSample.Infrastructure.Migrations
                 {
                     CommentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CommentText = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CommentText = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     CourseId = table.Column<int>(type: "int", nullable: true),
-                    CommentBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CommentBy = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     StarCount = table.Column<int>(type: "int", nullable: false),
                     IsApproved = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -185,6 +187,33 @@ namespace EfSample.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Account",
+                schema: "dbt",
+                columns: table => new
+                {
+                    AccountId = table.Column<int>(type: "int", nullable: false),
+                    AccountType = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    UserTeacherId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Account", x => x.AccountId);
+                    table.ForeignKey(
+                        name: "FK_Account_Teacher_AccountId",
+                        column: x => x.AccountId,
+                        principalSchema: "dbt",
+                        principalTable: "Teacher",
+                        principalColumn: "TeacherId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Account_Teacher_UserTeacherId",
+                        column: x => x.UserTeacherId,
+                        principalSchema: "dbt",
+                        principalTable: "Teacher",
+                        principalColumn: "TeacherId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CourseTeachers",
                 schema: "dbt",
                 columns: table => new
@@ -213,6 +242,12 @@ namespace EfSample.Infrastructure.Migrations
                         principalColumn: "TeacherId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Account_UserTeacherId",
+                schema: "dbt",
+                table: "Account",
+                column: "UserTeacherId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comment_CourseId",
@@ -267,6 +302,10 @@ namespace EfSample.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Account",
+                schema: "dbt");
+
             migrationBuilder.DropTable(
                 name: "Comment",
                 schema: "dbt");

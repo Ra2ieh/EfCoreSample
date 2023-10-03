@@ -30,4 +30,5 @@ public class User
     public int UserShipAge{ get; set; }
     public UserType UserType { get; set; }
 
+
 }

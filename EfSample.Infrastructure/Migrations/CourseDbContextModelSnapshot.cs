@@ -23,6 +23,25 @@ namespace EfSample.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("EfSample.Domain.Entities.Account", b =>
+                {
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AccountType")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int?>("UserTeacherId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AccountId");
+
+                    b.HasIndex("UserTeacherId");
+
+                    b.ToTable("Account", "dbt");
+                });
+
             modelBuilder.Entity("EfSample.Domain.Entities.Comment", b =>
                 {
                     b.Property<int>("CommentId")
@@ -283,6 +302,21 @@ namespace EfSample.Infrastructure.Migrations
                     b.ToTable("User", "dbt");
                 });
 
+            modelBuilder.Entity("EfSample.Domain.Entities.Account", b =>
+                {
+                    b.HasOne("EfSample.Domain.Entities.Teacher", null)
+                        .WithOne("Account")
+                        .HasForeignKey("EfSample.Domain.Entities.Account", "AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EfSample.Domain.Entities.Teacher", "User")
+                        .WithMany()
+                        .HasForeignKey("UserTeacherId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("EfSample.Domain.Entities.Comment", b =>
                 {
                     b.HasOne("EfSample.Domain.Entities.Course", "Course")
@@ -350,6 +384,11 @@ namespace EfSample.Infrastructure.Migrations
                     b.Navigation("Discount");
 
                     b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("EfSample.Domain.Entities.Teacher", b =>
+                {
+                    b.Navigation("Account");
                 });
 #pragma warning restore 612, 618
         }
