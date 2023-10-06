@@ -81,6 +81,10 @@ public class CourseDbContext : DbContext
               c.IncrementsBy(5);
               c.IsCyclic();
           });
+        //concurrency
+        modelBuilder.Entity<Course>().Property(e=>e.RowVersion).IsConcurrencyToken();
+        modelBuilder.Entity<Product>().Property(e=> e.ProductName).IsConcurrencyToken();
+        modelBuilder.Entity<Product>().Property(e=> e.Amount).IsConcurrencyToken();
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

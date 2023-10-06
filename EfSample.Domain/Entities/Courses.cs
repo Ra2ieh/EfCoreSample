@@ -22,4 +22,5 @@ public  class Course
     public Discount Discount { get; set; }
     public string PersianStartDate { get;}
     public List<Zone> Zones { get;}
+    public byte[] RowVersion { get; set; }
 }
