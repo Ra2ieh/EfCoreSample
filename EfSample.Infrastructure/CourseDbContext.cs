@@ -28,6 +28,11 @@ public class CourseDbContext : DbContext
         {
             //do something
         }
+        //temporal table
+        modelBuilder.Entity<Course>().ToTable(t =>
+        {
+            t.IsTemporal();
+        });
         modelBuilder.HasDefaultSchema("dbt");
         //modelBuilder.Entity<Course>().Ignore(e=>e.Zones);
         modelBuilder.Ignore<Zone>();
@@ -85,6 +90,8 @@ public class CourseDbContext : DbContext
         modelBuilder.Entity<Course>().Property(e=>e.RowVersion).IsConcurrencyToken();
         modelBuilder.Entity<Product>().Property(e=> e.ProductName).IsConcurrencyToken();
         modelBuilder.Entity<Product>().Property(e=> e.Amount).IsConcurrencyToken();
+
+   
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
