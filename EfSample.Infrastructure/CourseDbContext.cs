@@ -68,9 +68,19 @@ public class CourseDbContext : DbContext
         modelBuilder.Entity<Product>().HasDiscriminator<int>("Discriminator").HasValue<Product>(1).HasValue<Books>(2).HasValue<Podcast>(3);
         //UDF-scaler value function
         modelBuilder.HasDbFunction(typeof(TagsFunctions).GetMethod("GetCourseTagsCount", new[] { typeof(int) }));
+        //computed column
         modelBuilder.Entity<User>().Property(e => e.FullName).HasComputedColumnSql("FirstName+' '+LastName",true);
+        //default value
         modelBuilder.Entity<User>().Property(e => e.UserShipAge).HasDefaultValue(0);
         modelBuilder.Entity<Course>().Property(e => e.StartDate).HasDefaultValueSql("GetDate()");
+        //sequence
+        modelBuilder.HasSequence("Sample", "dbo", c =>
+          {
+              c.StartsAt(1);
+              c.HasMax(2000);
+              c.IncrementsBy(5);
+              c.IsCyclic();
+          });
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
