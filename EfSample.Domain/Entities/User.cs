@@ -26,6 +26,7 @@ public class User
         get { return _lastNameField; }
         set { _lastNameField = value; } 
     }
+    public string FullName { get; set; }
     public int Age{ get; set; }
     public int UserShipAge{ get; set; }
     public UserType UserType { get; set; }

@@ -2,7 +2,7 @@
 
 namespace EfSample.Infrastructure;
 
-public class CourseDbContext:DbContext
+public class CourseDbContext : DbContext
 {
     public DbSet<Course> Course { get; set; }
     public DbSet<Teacher> Teacher { get; set; }
@@ -12,11 +12,11 @@ public class CourseDbContext:DbContext
     public DbSet<CourseTeachers> CourseTeachers { get; set; }
     public DbSet<User> User { get; set; }
     public DbSet<MyCourses> MyCourses { get; set; }
-    public DbSet<Account> Account{ get; set; }
+    public DbSet<Account> Account { get; set; }
     public DbSet<CourseIncludingDiscount> CourseIncludingDiscount { get; set; }
 
     #region constructor
-    public CourseDbContext(DbContextOptions<CourseDbContext> options):base(options)
+    public CourseDbContext(DbContextOptions<CourseDbContext> options) : base(options)
     {
 
     }
@@ -24,7 +24,7 @@ public class CourseDbContext:DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        if(Database.IsSqlServer() || Database.IsRelational())
+        if (Database.IsSqlServer() || Database.IsRelational())
         {
             //do something
         }
@@ -33,31 +33,31 @@ public class CourseDbContext:DbContext
         modelBuilder.Ignore<Zone>();
         modelBuilder.ApplyConfiguration(new DiscountEntityConfiguration());
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserEntityConfiguration).Assembly);
-        modelBuilder.Entity<CourseIncludingDiscount>().ToTable(nameof(CourseIncludingDiscount),"view");
+        modelBuilder.Entity<CourseIncludingDiscount>().ToTable(nameof(CourseIncludingDiscount), "view");
         //one to one relationship configuration with fluent
-        modelBuilder.Entity<Teacher>().HasOne(o=>o.Account)
+        modelBuilder.Entity<Teacher>().HasOne(o => o.Account)
                     .WithOne()
-                    .HasForeignKey<Account>(o=>o.AccountId)
+                    .HasForeignKey<Account>(o => o.AccountId)
                     .OnDelete(DeleteBehavior.ClientCascade);
         // one to many relationship configuration with fluent
         modelBuilder.Entity<Course>().HasMany(o => o.Comments)
                                      .WithOne()
                                      .HasForeignKey(o => o.CourseId)
                                      .IsRequired()
-                                     .HasPrincipalKey(e=>e.CourseSerie)
+                                     .HasPrincipalKey(e => e.CourseSerie)
                                      .HasConstraintName("CourseINrelWithComment");
         modelBuilder.Entity<Course>(c =>
         {
-            c.HasMany(o=>o.Tags)
-             .WithMany(t=>t.Courses)
+            c.HasMany(o => o.Tags)
+             .WithMany(t => t.Courses)
              .UsingEntity<CourseTag>(
-                c=>c.HasOne(d=>d.Tag)
+                c => c.HasOne(d => d.Tag)
                 .WithMany()
-                .HasForeignKey(d=>d.TagId),
-                t=>t.HasOne(d=>d.Course)
+                .HasForeignKey(d => d.TagId),
+                t => t.HasOne(d => d.Course)
                 .WithMany()
-                .HasForeignKey(d=>d.TagId));
-          
+                .HasForeignKey(d => d.TagId));
+
         });
         modelBuilder.Entity<Teacher>(e =>
         {
@@ -68,11 +68,13 @@ public class CourseDbContext:DbContext
         modelBuilder.Entity<Product>().HasDiscriminator<int>("Discriminator").HasValue<Product>(1).HasValue<Books>(2).HasValue<Podcast>(3);
         //UDF-scaler value function
         modelBuilder.HasDbFunction(typeof(TagsFunctions).GetMethod("GetCourseTagsCount", new[] { typeof(int) }));
-            }
+        modelBuilder.Entity<User>().Property(e => e.FullName).HasComputedColumnSql("FirstName+' '+LastName",true);
+    }
+
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<string>().HaveMaxLength(250);
     }
     //table value function
-    public IQueryable<Comment> GetCourseComments(int id)=>FromExpression(()=>GetCourseComments(id));
+    public IQueryable<Comment> GetCourseComments(int id) => FromExpression(() => GetCourseComments(id));
 }

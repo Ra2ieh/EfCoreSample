@@ -301,8 +301,14 @@ namespace EfSample.Infrastructure.Migrations
                         .HasColumnType("nvarchar(2)");
 
                     b.Property<string>("FirstName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(102)
+                        .HasColumnType("nvarchar(102)");
+
+                    b.Property<string>("FullName")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)")
+                        .HasComputedColumnSql("FirstName+' '+LastName", true);
 
                     b.Property<string>("LastName")
                         .HasMaxLength(50)

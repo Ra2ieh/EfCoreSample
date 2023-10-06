@@ -66,6 +66,26 @@ namespace EfSample.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Product",
+                schema: "dbt",
+                columns: table => new
+                {
+                    ProductId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Amount = table.Column<decimal>(type: "decimal(14,2)", precision: 14, scale: 2, nullable: false),
+                    Discriminator = table.Column<int>(type: "int", nullable: false),
+                    PageSize = table.Column<int>(type: "int", nullable: true),
+                    Author = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Narrator = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Time = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Product", x => x.ProductId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tag",
                 schema: "dbt",
                 columns: table => new
@@ -104,8 +124,9 @@ namespace EfSample.Infrastructure.Migrations
                 {
                     UserId = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(102)", maxLength: 102, nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    FullName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true, computedColumnSql: "FirstName+' '+LastName", stored: true),
                     Age = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: false),
                     UserShipAge = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: false),
                     UserType = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
@@ -373,6 +394,10 @@ namespace EfSample.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Phone",
+                schema: "dbt");
+
+            migrationBuilder.DropTable(
+                name: "Product",
                 schema: "dbt");
 
             migrationBuilder.DropTable(

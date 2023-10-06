@@ -12,6 +12,7 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
         builder.Property(e=>e.UserName).IsRequired(true).IsUnicode(true).HasMaxLength(20);
         builder.Property(e=>e.FirstName).HasMaxLength(50);
         builder.Property(e=>e.LastName).HasMaxLength(50);
+        builder.Property(e => e.FirstName).HasMaxLength(102);
         builder.Property(e=>e.UserType).HasConversion<string>().HasMaxLength(10);
         //inline
         builder.Property(e=>e.Age).HasConversion(e=>e.ToString(),e=>int.Parse(e)).HasMaxLength(2);

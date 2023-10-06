@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EfSample.Infrastructure.Migrations
 {
     [DbContext(typeof(CourseDbContext))]
-    [Migration("20231006084915_scaler-func")]
-    partial class scalerfunc
+    [Migration("20231006100132_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -304,8 +304,14 @@ namespace EfSample.Infrastructure.Migrations
                         .HasColumnType("nvarchar(2)");
 
                     b.Property<string>("FirstName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(102)
+                        .HasColumnType("nvarchar(102)");
+
+                    b.Property<string>("FullName")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)")
+                        .HasComputedColumnSql("FirstName+' '+LastName", true);
 
                     b.Property<string>("LastName")
                         .HasMaxLength(50)
