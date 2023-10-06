@@ -69,6 +69,8 @@ public class CourseDbContext : DbContext
         //UDF-scaler value function
         modelBuilder.HasDbFunction(typeof(TagsFunctions).GetMethod("GetCourseTagsCount", new[] { typeof(int) }));
         modelBuilder.Entity<User>().Property(e => e.FullName).HasComputedColumnSql("FirstName+' '+LastName",true);
+        modelBuilder.Entity<User>().Property(e => e.UserShipAge).HasDefaultValue(0);
+        modelBuilder.Entity<Course>().Property(e => e.StartDate).HasDefaultValueSql("GetDate()");
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
