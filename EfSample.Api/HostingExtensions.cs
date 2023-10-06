@@ -19,6 +19,7 @@ namespace EfSample.Api
 
             //builder.Services.AddMediatR(typeof(GetCourseWithTeahcersDetailQueryHandler).Assembly);
             builder.Services.InstallServicesInAssemblies(builder.Configuration);
+          
             return builder.Build();
         }
         public static WebApplication ConfigurePileLine(this WebApplication app)

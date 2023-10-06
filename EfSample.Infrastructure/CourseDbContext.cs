@@ -1,4 +1,6 @@
-﻿namespace EfSample.Infrastructure;
+﻿using EfSample.Domain.Functions;
+
+namespace EfSample.Infrastructure;
 
 public class CourseDbContext:DbContext
 {
@@ -64,7 +66,9 @@ public class CourseDbContext:DbContext
             e.OwnsOne(o => o.Profile);
         });
         modelBuilder.Entity<Product>().HasDiscriminator<int>("Discriminator").HasValue<Product>(1).HasValue<Books>(2).HasValue<Podcast>(3);
-    }
+        //UDF
+        modelBuilder.HasDbFunction(typeof(TagsFunctions).GetMethod("GetCourseTagsCount", new[] { typeof(int) }));
+            }
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<string>().HaveMaxLength(250);
