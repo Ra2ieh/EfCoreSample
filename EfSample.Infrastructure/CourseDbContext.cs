@@ -66,11 +66,13 @@ public class CourseDbContext:DbContext
             e.OwnsOne(o => o.Profile);
         });
         modelBuilder.Entity<Product>().HasDiscriminator<int>("Discriminator").HasValue<Product>(1).HasValue<Books>(2).HasValue<Podcast>(3);
-        //UDF
+        //UDF-scaler value function
         modelBuilder.HasDbFunction(typeof(TagsFunctions).GetMethod("GetCourseTagsCount", new[] { typeof(int) }));
             }
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<string>().HaveMaxLength(250);
     }
+    //table value function
+    public IQueryable<Comment> GetCourseComments(int id)=>FromExpression(()=>GetCourseComments(id));
 }
